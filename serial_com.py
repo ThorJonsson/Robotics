@@ -99,6 +99,31 @@ def switch_LED(motor_id, turn_on):
 	return data
 
 
+# A simple implementation of example 18 in AX-12 documentation
+# Before: motor_id hasn't been converted to hex
+# After: An instruction package that changes the position of the motor to 
+# 180° with an angular velocity of 057RPM. To do this we need to set:
+# Address 0x1E (Goal Position) to 0x200 
+# address 0x20 (moving speed) to 0x200
+def move_motor(motor_id):
+	data_id = to_hex(motor_id)
+	data_length = to_hex(0x07)
+	# We write the data 
+	data_instruction = to_hex(0x03)
+	GP_address = to_hex(0x1E)
+	# I cannot figure out how they come up with the following
+	data1 = to_hex(0x00)
+	data2 = to_hex(0x02)
+	wtf = data1 + data2 + data1 + data2
+	data = data_id + data_length + data_instruction + GP_address + wtf
+	# compute the checksum
+	data_checksum = to_hex(check_sum(data))
+	# add checksum to the instruction package
+	data += data_checksum
+	return data 
+
+
+
 if __name__ == '__main__':
 
 	# we open the port
@@ -108,9 +133,20 @@ if __name__ == '__main__':
 	turn_on = 1
 	motors = [0x3d,0x3E,0x6]
 	for i in motors:
-		data_id = to_hex(i)
-		data = switch_LED(data_id, turn_on)
+		
+		# Pinging motor i
+		ping = ping_motor(i)
+		
+		print decode_data(ping)
+		write_data(serial_port, ping)
 
+		# read the status packet (size 6)
+		d = read_data(serial_port, 6)
+		print decode_data(d)
+
+		# Let there be light, and there was light
+		data = switch_LED(i, turn_on)
+		
 		print decode_data(data)
 		write_data(serial_port, data)
 
