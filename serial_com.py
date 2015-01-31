@@ -4,27 +4,20 @@
 import serial
 
 
+#------------------------ Functions that control communication with serial port
+
+
 def open_serial(port, baud, timeout):
     ser = serial.Serial(port=port, baudrate=baud, timeout=timeout)
     if ser.isOpen():
         return ser
     else:
         print 'SERIAL ERROR'
-
-def check_sum(data):
-	ret = 0
-	for w in data:
-		ret += ord(w)
-	# Why 0xFF????
-	return (~(ret))&0xFF
 		
 	
 def close(ser):
     ser.close()
 
-
-def to_hex(val):
-    return chr(val)
 
 # Sends the instruction package to the serial port
 def write_data(ser, data):
@@ -38,12 +31,30 @@ def read_data(ser, size=1):
     return ser.read(size)
 
 
+#------------------ Fundamental functions for constructing instruction packages
+
+
+def check_sum(data):
+	ret = 0
+	for w in data:
+		ret += ord(w)
+	# Why 0xFF????
+	return (~(ret))&0xFF
+
+
+def to_hex(val):
+    return chr(val)
+
+
 def decode_data(data):
     res = ''
     for d in data:
         res += hex(ord(d)) + ' '
 
     return res
+
+
+#----------- Functions that construct instruction packages for specific actions
 
 
 # Before: motor_id hasn't been converted to hex, turn_on acts as a boolean
@@ -86,7 +97,6 @@ def switch_LED(motor_id, turn_on):
 	# add checksum to the instruction package
 	data += data_checksum
 	return data
-
 
 
 if __name__ == '__main__':
