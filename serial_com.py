@@ -4,7 +4,7 @@
 import serial
 
 
-def open_serial(port, baud,timeout):
+def open_serial(port, baud, timeout):
     ser = serial.Serial(port=port, baudrate=baud, timeout=timeout)
     if ser.isOpen():
         return ser
@@ -41,6 +41,22 @@ def decode_data(data):
 
     return res
 
+# Before: motor_id has been converted to hex
+# After: state of LED has been changed
+# To change LED state the following info needs to be sent:
+# 0xff 0xff motor_id data_length write LED_address switch
+def switch_LED(motor_id, turn_on):
+	# data_length is 3 + the number of parameters given to a specific address
+	data_length = to_hex(0x04)
+	# write is always given by 0x03, switching light is done with write
+	data_instruction = to_hex(0x03)
+	LED_address = to_hex(0x19)
+	if turn_on:
+		switch = to_hex(0x01)
+	else:
+		switch = to_hex(0x00)
+	concatenate_data()
+
 if __name__ == '__main__':
 
 	# we open the port
@@ -53,8 +69,8 @@ if __name__ == '__main__':
 	#~ # id of the motor (here 1), you need to change
 	#~ data_id = to_hex(0x01)
 
-	# lenght of the packet
-	data_lenght = to_hex(0x04)
+	# length of the packet
+	data_length = to_hex(0x04)
 
 	# instruction write= 0x03
 	data_instruction = to_hex(0x03)
@@ -63,14 +79,14 @@ if __name__ == '__main__':
 	data_param1 = to_hex(0x19)  # LED address=0x19
 	data_param2 = to_hex(0x00)  # write 0x01 = ping the motor
 
-	adress = [0x3d,0x3E,0x6]
-	for i in adress:
+	motors = [0x3d,0x3E,0x6]
+	for i in motors:
 		data_id = to_hex(i)
 		# we concatenate everything
-		data = data_start + data_start + data_id + data_lenght + \
+		data = data_start + data_start + data_id + data_length + \
 		data_instruction + data_param1 + data_param2 
 		
-		data_second = data_id + data_lenght + data_instruction + data_param1 + data_param2
+		data_second = data_id + data_length + data_instruction + data_param1 + data_param2
 		
 		# checksum (read the doc)
 		
