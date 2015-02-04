@@ -8,15 +8,15 @@ import serial
 
 
 def open_serial(port, baud, timeout):
-    ser = serial.Serial(port=port, baudrate=baud, timeout=timeout)
-    if ser.isOpen():
-        return ser
-    else:
-        print 'SERIAL ERROR'
+	ser = serial.Serial(port=port, baudrate=baud, timeout=timeout)
+	if ser.isOpen():
+		return ser
+	else:
+		print 'SERIAL ERROR'
 		
 	
 def close(ser):
-    ser.close()
+	ser.close()
 
 
 # Sends the instruction package to the serial port
@@ -24,11 +24,11 @@ def write_data(ser, data):
 	# 0xff is always at the start of an instruction package
 	data_start = to_hex(0xff)
 	data = data_start + data_start + data
-    ser.write(data)
+	ser.write(data)
 
 
 def read_data(ser, size=1):
-    return ser.read(size)
+	return ser.read(size)
 
 
 #------------------ Fundamental functions for constructing instruction packages
@@ -43,15 +43,15 @@ def check_sum(data):
 
 
 def to_hex(val):
-    return chr(val)
+	return chr(val)
 
 
 def decode_data(data):
-    res = ''
-    for d in data:
-        res += hex(ord(d)) + ' '
+	res = ''
+	for d in data:
+		res += hex(ord(d)) + ' '
 
-    return res
+	return res
 
 
 #----------- Functions that construct instruction packages for specific actions
@@ -85,12 +85,12 @@ def switch_LED(motor_id, turn_on):
 	# write is always given by 0x03, switching light is done with write
 	data_instruction = to_hex(0x03)
 	LED_address = to_hex(0x19)
-	
+
 	if turn_on:
 		switch = to_hex(0x01)
 	else:
 		switch = to_hex(0x00)
-	
+
 	data = data_id + data_length + data_instruction + LED_address + switch
 	# compute the checksum
 	data_checksum = to_hex(check_sum(data))
@@ -133,10 +133,9 @@ if __name__ == '__main__':
 	turn_on = 1
 	motors = [0x3d,0x3E,0x6]
 	for i in motors:
-		
 		# Pinging motor i
 		ping = ping_motor(i)
-		
+
 		print decode_data(ping)
 		write_data(serial_port, ping)
 
@@ -146,7 +145,7 @@ if __name__ == '__main__':
 
 		# Let there be light, and there was light
 		data = switch_LED(i, turn_on)
-		
+
 		print decode_data(data)
 		write_data(serial_port, data)
 
