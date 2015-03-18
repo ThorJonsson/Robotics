@@ -135,7 +135,7 @@ def moving_center(asterix,x,y,z,l=63.7):
 	move_leg(100+y,-30+x,z,legs[1])
 	time.sleep(2)
 
-def walk_slowly(asterix,x,y,z, legs, l=63.7):
+def walk_first_way(asterix,x,y,z, legs, l=63.7):
 	i = 0
 	while 1:
 		#position 1
@@ -146,12 +146,12 @@ def walk_slowly(asterix,x,y,z, legs, l=63.7):
 		move_leg(100,30,-60,legs[2])
 		move_leg(100,-30,-60,legs[1])
 		print "position 1"
-		time.sleep(0.2)
+		time.sleep(1)
 		# position 2
 		move_leg(100,-30,-30,legs[0])
 		move_leg(100,30,-30,legs[3])
 		print "position 2"
-		time.sleep(0.2)
+		time.sleep(1)
 		# move_leg(100,30,-60,legs[5])
 		# move_leg(100,-30,-60,legs[4])
 		# move_leg(100,30,-60,legs[2])
@@ -162,21 +162,52 @@ def walk_slowly(asterix,x,y,z, legs, l=63.7):
 		move_leg(130,30,-60,legs[2])
 		move_leg(130,-30,-60,legs[1])
 		print "position 3"
-		time.sleep(0.2)
+		time.sleep(1)
 		# position 4
 		move_leg(100,-30,-70,legs[0])
 		move_leg(100,30,-70,legs[3])
 		print "position 4"
-		time.sleep(0.2)
+		time.sleep(1)
 		#position 5
 		move_leg(100,30,-60,legs[5])
 		move_leg(100,-30,-60,legs[4])
 		move_leg(100,30,-60,legs[2])
 		move_leg(100,-30,-60,legs[1])
 		#print "position 5"
-		time.sleep(0.2)
+		time.sleep(1)
 		i +=1
 		print i
+
+def walk_second_way(asterix,x,y,z, legs, l=63.7):
+	# initial position (1)
+	move_leg(100,0,-50,legs[0])
+	move_leg(100,0,-50,legs[3])
+	move_leg(100,120,-50,legs[5])
+	move_leg(100,-120,-50,legs[4])
+	move_leg(100,120,-50,legs[2])
+	move_leg(100,-120,-50,legs[1])
+	print "position 1"
+	time.sleep(1)
+
+	#position 2 : three legs ups, three on the ground
+	move_leg(150,0,-20,legs[0])
+	move_leg(100,120,-20,legs[2])
+	move_leg(100,-120,-20,legs[4])
+	print "position 2"
+	time.sleep(1)
+
+	#position 3
+	while 1:
+		move_leg(100,0,-70,legs[3])
+		move_leg(50,-100,-70,legs[1])
+		move_leg(50,100,-70,legs[5])
+		time.sleep(0.5)
+		move_leg(100,0,-90,legs[3])
+		move_leg(50,-130,-70,legs[1])
+		move_leg(50,130,-70,legs[5])
+		time.sleep(0.5)
+
+
 
 def walk_straight(asterix,x,y,z, legs, l=63.7):
 	move_leg(150,0,0,legs[0])
@@ -216,10 +247,16 @@ if __name__ == '__main__':
 		# m.goal_position = 0
 		# time.sleep(0.5)
 	# time.sleep(1)
-	walk_slowly(asterix,40,40,40,legs)
+	# walk_first_way(asterix,40,40,40,legs)
+	walk_second_way(asterix,40,40,40,legs)
 	# moving_center(obj,40,30,-90)
 		#moving_center(obj,0,-30,-90)
-
+	# move_leg(150,0,-60,legs[0])
+	# move_leg(150,0,-60,legs[3])
+	# move_leg(100,100,-60,legs[5])
+	# move_leg(100,-100,-60,legs[4])
+	# move_leg(100,100,-60,legs[2])
+	# move_leg(100,-100,-60,legs[1])
 
 	asterix.close()
 
