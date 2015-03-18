@@ -12,6 +12,7 @@ import pypot.robot
 
 asterix = None
 
+
 def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
 	d13 = math.sqrt(x3*x3 + y3*y3) - l1
 	d = math.sqrt(d13*d13 + z3*z3)
@@ -56,6 +57,11 @@ def initialize():
 	    m.compliant = False		# <=> enable_torque.
 	    m.goal_position = 0
 
+  	# with closing(pypot.robot.from_json('my_robot.json')) as my_robot:
+	  #   # do stuff without having to make sure not to forget to close my_robot!
+	  #   pass
+
+
 
 	time.sleep(2)
 	return asterix
@@ -87,7 +93,7 @@ def move_leg(x,y,z,leg):
 	i=0
 	tupl = leg_ik(x,y,z)
 	for m in leg:
-		time.sleep(0.1)
+		# time.sleep(0.1)
 		m.goal_position = tupl[i]
 		i+=1
 
@@ -105,18 +111,55 @@ def experimentation(asterix):
 
 	asterix.close()
 
-if __name__=="main":
+def moving_all_legs(asterix,x,y,z,legs):
+	tupl = leg_ik(x,y,z)
+	move_leg(x,y,z,legs[0])
+	move_leg(x,y,z,legs[2])
+	move_leg(x,y,z,legs[1])
+	move_leg(x,y,z,legs[3])
+	move_leg(x,y,z,legs[5])
+	move_leg(x,y,z,legs[4])
 
+# detection()
+obj = initialize()
+# experimentation(obj)
+# motion(obj)
+legs = [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
+# moving_all_legs(obj,100,30,-110,legs)
+# time.sleep(1)
+# for m in obj.motors:
+	# m.goal_position = 0
+	# time.sleep(0.5)
+# time.sleep(1)
 
-	# detection()
-	obj = initialize()
-	# experimentation(obj)
-	# motion(obj)
-	legs = [obj.leg1,obj.leg2,obj.leg6,obj.leg4,obj.leg3,obj.leg5]
+move_leg(100,0,-60,legs[0])
+move_leg(100,0,-60,legs[3])
+move_leg(100,30,-60,legs[5])
+move_leg(100,-30,-60,legs[4])
+move_leg(100,30,-60,legs[2])
+move_leg(100,-30,-60,legs[1])
+time.sleep(3)
+while 1:
+	move_leg(110,-15,-60,legs[0])
+	move_leg(110,15,-60,legs[3])
+	move_leg(85,30,-60,legs[5])
+	move_leg(85,-30,-60,legs[4])
+	move_leg(115,30,-60,legs[2])
+	move_leg(115,-30,-60,legs[1])
+	time.sleep(0.2)
 
-	move_leg(100,50,-110,legs[0])
-	move_leg(100,-50,-110,legs[1])
-	move_leg(100,50,-110,legs[2])
-	move_leg(100,50,-110,legs[3])
-	move_leg(100,50,-110,legs[4])
-	move_leg(100,-50,-110,legs[5])
+	move_leg(110,15,-70,legs[0])
+	move_leg(110,-15,-70,legs[3])
+	move_leg(115,30,-60,legs[5])
+	move_leg(115,-30,-60,legs[4])
+	move_leg(85,30,-60,legs[2])
+	move_leg(85,-30,-60,legs[1])
+	time.sleep(0.2)
+
+obj.close()
+# move_leg(100,50,-110,legs[0])
+# move_leg(100,-50,-110,legs[1])
+# move_leg(100,50,-110,legs[2])
+# move_leg(100,50,-110,legs[3])
+# move_leg(100,50,-110,legs[4])
+# move_leg(100,-50,-110,legs[5])
