@@ -11,7 +11,7 @@ from contextlib import closing
 import pypot.robot
 
 asterix = None
-
+legs = []
 
 def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
 	d13 = math.sqrt(x3*x3 + y3*y3) - l1
@@ -30,6 +30,9 @@ def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
 	theta3 = -(theta3 - 90 + alpha + beta)
 	angles = (theta1,theta2,theta3)
 	return angles 
+
+def get_legs(obj):
+	return [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
 
 def detection():
 
@@ -97,6 +100,9 @@ def move_leg(x,y,z,leg):
 		m.goal_position = tupl[i]
 		i+=1
 
+def spider_position(x,y,z,asterix):
+
+	i = 1
 
 def experimentation(asterix):
 	tupl = leg_ik(100,0,0)
@@ -120,46 +126,100 @@ def moving_all_legs(asterix,x,y,z,legs):
 	move_leg(x,y,z,legs[5])
 	move_leg(x,y,z,legs[4])
 
-# detection()
-obj = initialize()
-# experimentation(obj)
-# motion(obj)
-legs = [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
-# moving_all_legs(obj,100,30,-110,legs)
-# time.sleep(1)
-# for m in obj.motors:
-	# m.goal_position = 0
-	# time.sleep(0.5)
-# time.sleep(1)
+def moving_center(asterix,x,y,z,l=63.7):
+	move_leg(100-x,y,z,legs[0])
+	move_leg(100+x,-y,z,legs[3])
+	move_leg(100-y,30-x,z,legs[5])
+	move_leg(100-y,-30-x,z,legs[4])
+	move_leg(100+y,30+x,z,legs[2])
+	move_leg(100+y,-30+x,z,legs[1])
+	time.sleep(2)
 
-move_leg(100,0,-60,legs[0])
-move_leg(100,0,-60,legs[3])
-move_leg(100,30,-60,legs[5])
-move_leg(100,-30,-60,legs[4])
-move_leg(100,30,-60,legs[2])
-move_leg(100,-30,-60,legs[1])
-time.sleep(3)
-while 1:
-	move_leg(110,-15,-60,legs[0])
-	move_leg(110,15,-60,legs[3])
-	move_leg(85,30,-60,legs[5])
-	move_leg(85,-30,-60,legs[4])
-	move_leg(115,30,-60,legs[2])
-	move_leg(115,-30,-60,legs[1])
-	time.sleep(0.2)
+def walk_slowly(asterix,x,y,z, legs, l=63.7):
+	i = 0
+	while 1:
+		#position 1
+		move_leg(150,0,-60,legs[0])
+		move_leg(150,0,-60,legs[3])
+		move_leg(100,30,-60,legs[5])
+		move_leg(100,-30,-60,legs[4])
+		move_leg(100,30,-60,legs[2])
+		move_leg(100,-30,-60,legs[1])
+		print "position 1"
+		time.sleep(0.2)
+		# position 2
+		move_leg(100,-30,-30,legs[0])
+		move_leg(100,30,-30,legs[3])
+		print "position 2"
+		time.sleep(0.2)
+		# move_leg(100,30,-60,legs[5])
+		# move_leg(100,-30,-60,legs[4])
+		# move_leg(100,30,-60,legs[2])
+		# move_leg(100,-30,-60,legs[1])
+		# #position 3
+		move_leg(70,30,-60,legs[5])
+		move_leg(70,-30,-60,legs[4])
+		move_leg(130,30,-60,legs[2])
+		move_leg(130,-30,-60,legs[1])
+		print "position 3"
+		time.sleep(0.2)
+		# position 4
+		move_leg(100,-30,-70,legs[0])
+		move_leg(100,30,-70,legs[3])
+		print "position 4"
+		time.sleep(0.2)
+		#position 5
+		move_leg(100,30,-60,legs[5])
+		move_leg(100,-30,-60,legs[4])
+		move_leg(100,30,-60,legs[2])
+		move_leg(100,-30,-60,legs[1])
+		#print "position 5"
+		time.sleep(0.2)
+		i +=1
+		print i
 
-	move_leg(110,15,-70,legs[0])
-	move_leg(110,-15,-70,legs[3])
-	move_leg(115,30,-60,legs[5])
-	move_leg(115,-30,-60,legs[4])
-	move_leg(85,30,-60,legs[2])
-	move_leg(85,-30,-60,legs[1])
-	time.sleep(0.2)
+def walk_straight(asterix,x,y,z, legs, l=63.7):
+	move_leg(150,0,0,legs[0])
+	move_leg(150,0,0,legs[3])
+	move_leg(100,30,-60,legs[5])
+	move_leg(100,-30,-60,legs[4])
+	move_leg(100,30,-60,legs[2])
+	move_leg(100,-30,-60,legs[1])
+	time.sleep(3)
+	while 1:
+		move_leg(100,-30,-50,legs[0])
+		move_leg(100,30,-50,legs[3])
+		move_leg(70,30,-60,legs[5])
+		move_leg(70,-30,-60,legs[4])
+		move_leg(130,30,-60,legs[2])
+		move_leg(130,-30,-60,legs[1])
+		time.sleep(0.5)
 
-obj.close()
-# move_leg(100,50,-110,legs[0])
-# move_leg(100,-50,-110,legs[1])
-# move_leg(100,50,-110,legs[2])
-# move_leg(100,50,-110,legs[3])
-# move_leg(100,50,-110,legs[4])
-# move_leg(100,-50,-110,legs[5])
+		move_leg(100,30,-50,legs[0])
+		move_leg(100,-30,-50,legs[3])
+		move_leg(130,30,-60,legs[5])
+		move_leg(130,-30,-60,legs[4])
+		move_leg(70,30,-60,legs[2])
+		move_leg(70,-30,-60,legs[1])
+		time.sleep(0.5)	
+
+
+if __name__ == '__main__':
+	# detection()
+	asterix = initialize()
+	# experimentation(obj)
+	# motion(obj)
+	legs = get_legs(asterix)
+	# moving_all_legs(obj,100,30,-110,legs)
+	# time.sleep(1)
+	# for m in obj.motors:
+		# m.goal_position = 0
+		# time.sleep(0.5)
+	# time.sleep(1)
+	walk_slowly(asterix,40,40,40,legs)
+	# moving_center(obj,40,30,-90)
+		#moving_center(obj,0,-30,-90)
+
+
+	asterix.close()
+
