@@ -80,17 +80,6 @@ def move_leg(x,y,z,leg):
 		m.goal_position = tupl[i]
 		i+=1
 
-def move_leg(theta,leg,z,R = 100):
-	
-	i=0
-	# tupl is a vector that carries the angles that represent the final position of the tip of the leg
-	# the angles are calculated from the arguments of the function using inverse kinematics
-	tupl = leg_ik(R*math.cos(math.radians(theta)),R*math.sin(theta),z)
-	for m in leg:
-		m.goal_position = tupl[i]
-		i+=1
-
-
 def moving_all_legs(asterix,x,y,z,legs):
 	tupl = leg_ik(x,y,z)
 	move_leg(x,y,z,legs[0])
@@ -155,16 +144,6 @@ def moving_center(asterix,x,y,z,l=63.7):
 	move_leg(100-y,-30-x,z,legs[2])
 	time.sleep(0.2)
 
-def moving_center(asterix,theta):
-	# Experiments have shown that using the values 100 and 30 for changing x and y respectively is working okay
-	move_leg(theta[0],legs[0])
-	move_leg(theta[3],legs[3])
-	move_leg(theta[4],legs[4])
-	move_leg(theta[5],legs[5])
-	move_leg(theta[1],legs[1])
-	move_leg(theta[2],legs[2])
-	time.sleep(0.2)
-
 """
 TODO: fix the triangle problem
 """
@@ -193,40 +172,97 @@ def rotation(asterix,y,y25,z):
 	move_leg(100,30+y,z,legs[4])
 	time.sleep(breaklength)	
 
-def rotation_angle(asterix,theta):
+""" NEW STUFF """
+""" Written by Thor the 24/03/15 """
+# This function takes care of 1 leg at a time
+# This moves the leg given polar coordinates. Important because we when we need to do a rotation the legs should not move
+# outside the circle of rotation. We want a perfect rotation!
+def move_leg(theta,z,leg,R = 100):
+	
+	i=0
+	# Tupl is a vector that carries the angles that represent the final position of the tip of the leg
+	# The angles are calculated from the arguments of the function using inverse kinematics
+	# R is the radius of the circle of rotation. Theta is given in degrees. 
+	# Lets transform our polar coordinates onto the Cartesian plane
+	x = R*math.cos(math.radians(theta))
+	y = R*math.sin(math.radians(theta))
+	motor_angles = leg_ik(x,y,z)
+	for m in leg:
+		m.goal_position = motor_angles[i]
+		i+=1
+
+# This should just give us our initial spider position
+# We also use this function when rotating to refix the legs' frames of reference
+def moving_center(asterix,theta,z = -60):
+	# Experiments have shown that using the values 100 and 30 for changing x and y respectively is working okay
+	move_leg(0,z,legs[0])
+	move_leg(theta,z,legs[1])
+	move_leg(-theta,z,legs[2])
+	move_leg(0,z,legs[3])
+	move_leg(theta,z,legs[4])
+	move_leg(-theta,z,legs[5])
+
+	time.sleep(0.2)
+
+# max_angle = 20 is just a guess.
+def arbitrary_rotation(asterix,beta, max_angle = 20):
+# Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
+# This gives us the number of rotations we need to make by a predefined max_angle 
+# The remainder gives us the amount we need to rotate by to be able to finish the full rotation by an angle of beta
+# i.e. beta = q*max_angle + r
+	q = beta//max_angle 
+	r = beta%max_angle
+	
+	# rotate by max_angle q times
+	for i in range(1,q)
+		rotation_angle(asterix,max_angle)
+
+	# finally rotate by r 
+	rotation_angle(asterix,r)
+
+"""
+TODO: make sure that this works. If it works than we can easily do experiments to find the highest value on alpha
+If we know the highest value of alpha we can determine the number of turns needed to do an arbitrary amount of rotation by using Euclidean division
+See the draft implementation for arbitrary_rotation above.
+"""
+# theta is the value we need to set the initial position
+# alpha determines the amount of rotation (made by each call to the function) from this initial position
+# alpha is physically limited because of the legs. We should define this limit as max_angle - see above.
+def rotation_angle(asterix,alpha,theta = 15):
 	#clockwise 2 and 5 are limited
 	breaklength = 1.5
 	z = -60
-	#these are the values of theta that give the initial position
-	
-	theta = [0,16,-16,0,16,-16]
-	#position1
-	#Here we define the initial position. i.e. the spider position
-	#It is important to observe the x and y values of each leg in its own frame of reference
+
+	# Position 1: The 'spider' position. This position has a low center of gravity. 
+	# Here we define the initial position. i.e. the spider position
+	# It is important to observe the x and y values of each leg in its own frame of reference
 	moving_center(asterix,theta)
-	#position2	put lags 2, 4, 6 in the air and rotates at the same time
-	# Here we apply the triangle problem
-	move_leg(16,z+20,legs[1])	
-	move_leg(0,z+20,legs[3])
-	move_leg(-16,z+20,legs[5])
+	
+	# Position 2: Put legs 1, 3, 5 in the air and rotate at the same time
+	move_leg(theta+alpha,z+20,legs[1])	
+	move_leg(alpha,z+20,legs[3])
+	move_leg(-theta+alpha,z+20,legs[5])
 	time.sleep(breaklength)
-	#position3 rotate legs 2, 4, 6
-	move_leg(16,legs[1])
-	move_leg(0,z,legs[3])
-	move_leg(-16,z,legs[5])
-	time.sleep(breaklength)
-	#position4 rotate legs 1, 3, 5
-	move_leg(-16,z+20,legs[2])	
-	move_leg(0,z+20,legs[0])
-	move_leg(16,z+20,legs[4])
 
+	# Position 3: Put legs 1,3 and 5 down
+	move_leg(theta+alpha,z,legs[1])	
+	move_leg(alpha,z,legs[3])
+	move_leg(-theta+alpha,z,legs[5])
 	time.sleep(breaklength)
 	
-	move_leg(-16,z,legs[2])	
-	move_leg(0,z,legs[0])
-	move_leg(16,z,legs[4])
-	time.sleep(breaklength)	
+	# Position 4: Rotate legs 0, 2, 4
+	move_leg(alpha,z+20,legs[0])
+	move_leg(-theta+alpha,z+20,legs[2])	
+	move_leg(theta+alpha,z+20,legs[4])
+	time.sleep(breaklength)
 
+	# Position 5: Put legs 0, 2 and 4 down.
+	move_leg(alpha,z,legs[0])
+	move_leg(-theta+alpha,z,legs[2])	
+	move_leg(theta+alpha,z,legs[4])
+	time.sleep(breaklength)
+
+""" NEW STUFF ENDS HERE """
 
 def fast_rotation(asterix,y,z):
 	breaklength = 1
