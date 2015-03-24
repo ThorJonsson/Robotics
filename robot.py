@@ -7,6 +7,7 @@ import math
 import json
 import time
 from contextlib import closing
+import Tkinter as tk
 
 import pypot.robot
 
@@ -69,54 +70,26 @@ def initialize():
 	time.sleep(2)
 	return asterix
 
-def motion(asterix):
-	# Do the sinusoidal motions for 10 seconds
-	amp = 30
-	freq = 0.5
-	t0 = time.time()
-
-	while True:
-		t = time.time() - t0
-
-		if t > 10:
-			break
-
-		pos = amp * numpy.sin(2 * numpy.pi * freq * t)
-
-		asterix.motor_51.goal_position = pos
-
-	    # In order to make the other sinus more visible,
-	    # we apply it with an opposite phase and we increase the amplitude.
-		asterix.motor_41.goal_position = -1.5 * asterix.motor_51.present_position
-
-	    # We want to run this loop at 50Hz.
-		time.sleep(0.02)
-
 def move_leg(x,y,z,leg):
+	
 	i=0
-
+	# tupl is a vector that carries the angles that represent the final position of the tip of the leg
+	# the angles are calculated from the arguments of the function using inverse kinematics
 	tupl = leg_ik(x,y,z)
 	for m in leg:
-		# time.sleep(0.1)
 		m.goal_position = tupl[i]
 		i+=1
 
-def spider_position(x,y,z,asterix):
+def move_leg(theta,leg,z,R = 100):
+	
+	i=0
+	# tupl is a vector that carries the angles that represent the final position of the tip of the leg
+	# the angles are calculated from the arguments of the function using inverse kinematics
+	tupl = leg_ik(R*math.cos(math.radians(theta)),R*math.sin(theta),z)
+	for m in leg:
+		m.goal_position = tupl[i]
+		i+=1
 
-	i = 1
-
-def experimentation(asterix):
-	tupl = leg_ik(100,0,0)
-	asterix.motor_41.goal_position = tupl[0]
-	asterix.motor_42.goal_position = tupl[1]
-	asterix.motor_43.goal_position = tupl[2]
-	time.sleep(0.5)
-	tupl = leg_ik(100,-50,-110)
-	asterix.motor_41.goal_position = tupl[0]
-	asterix.motor_42.goal_position = tupl[1]
-	asterix.motor_43.goal_position = tupl[2]
-
-	asterix.close()
 
 def moving_all_legs(asterix,x,y,z,legs):
 	tupl = leg_ik(x,y,z)
@@ -128,8 +101,13 @@ def moving_all_legs(asterix,x,y,z,legs):
 	move_leg(x,y,z,legs[4])
 # Before the center is in (0,0,-60)
 
+"""
+TODO: Currently the function is not using all the parameters. What happens when we replace current arguments to move_leg?
+We need to be able to use arbitrary values. Au moins we need to be able to answer why we have choosen the current values
+"""
 def romantic_walk(asterix,x,y,z):
 	breaklength = 0.2
+	z = -60
 	# position 1
 	#moving_center(asterix,0,-40,-60,legs)
 	# position 2
@@ -162,9 +140,13 @@ def romantic_walk(asterix,x,y,z):
 	move_leg(100,30,z,legs[1])
 	move_leg(100,-30,z,legs[2])
 	time.sleep(breaklength)
-#Before we  enter this function the current position is 
 
+"""
+	Moving the center of the robot without changing the position of the tip of the legs.
+TODO: What is the best value to use in order to obtain this action; Is it 100? does it make any more sense to use other parameters?
+"""
 def moving_center(asterix,x,y,z,l=63.7):
+	# Experiments have shown that using the values 100 and 30 for changing x and y respectively is working okay
 	move_leg(100-x,y,z,legs[0])
 	move_leg(100+x,-y,z,legs[3])
 	move_leg(100+y,30+x,z,legs[4])
@@ -173,9 +155,22 @@ def moving_center(asterix,x,y,z,l=63.7):
 	move_leg(100-y,-30-x,z,legs[2])
 	time.sleep(0.2)
 
+def moving_center(asterix,theta):
+	# Experiments have shown that using the values 100 and 30 for changing x and y respectively is working okay
+	move_leg(theta[0],legs[0])
+	move_leg(theta[3],legs[3])
+	move_leg(theta[4],legs[4])
+	move_leg(theta[5],legs[5])
+	move_leg(theta[1],legs[1])
+	move_leg(theta[2],legs[2])
+	time.sleep(0.2)
+
+"""
+TODO: fix the triangle problem
+"""
 def rotation(asterix,y,y25,z):
 	#clockwise 2 and 5 are limited
-	breaklength = 0.5
+	breaklength = 1.5
 	#position1
 	moving_center(asterix,0,0,z,legs)
 	#position2	put lags 2, 4, 6 in the air
@@ -198,6 +193,41 @@ def rotation(asterix,y,y25,z):
 	move_leg(100,30+y,z,legs[4])
 	time.sleep(breaklength)	
 
+def rotation_angle(asterix,theta):
+	#clockwise 2 and 5 are limited
+	breaklength = 1.5
+	z = -60
+	#these are the values of theta that give the initial position
+	
+	theta = [0,16,-16,0,16,-16]
+	#position1
+	#Here we define the initial position. i.e. the spider position
+	#It is important to observe the x and y values of each leg in its own frame of reference
+	moving_center(asterix,theta)
+	#position2	put lags 2, 4, 6 in the air and rotates at the same time
+	# Here we apply the triangle problem
+	move_leg(16,z+20,legs[1])	
+	move_leg(0,z+20,legs[3])
+	move_leg(-16,z+20,legs[5])
+	time.sleep(breaklength)
+	#position3 rotate legs 2, 4, 6
+	move_leg(16,legs[1])
+	move_leg(0,z,legs[3])
+	move_leg(-16,z,legs[5])
+	time.sleep(breaklength)
+	#position4 rotate legs 1, 3, 5
+	move_leg(-16,z+20,legs[2])	
+	move_leg(0,z+20,legs[0])
+	move_leg(16,z+20,legs[4])
+
+	time.sleep(breaklength)
+	
+	move_leg(-16,z,legs[2])	
+	move_leg(0,z,legs[0])
+	move_leg(16,z,legs[4])
+	time.sleep(breaklength)	
+
+
 def fast_rotation(asterix,y,z):
 	breaklength = 1
 	moving_center(asterix,0,0,z,legs)
@@ -216,9 +246,6 @@ def fast_rotation(asterix,y,z):
 	move_leg(100,30+y,z,legs[1])
 	move_leg(100,30+y,z,legs[4])
 	time.sleep(breaklength)
-
-def first_walk(asterix,x,y,z, legs, l=63.7):
-	a=1
 
 def walk_first_way():
 	i = 0
@@ -328,8 +355,9 @@ if __name__ == '__main__':
 	# experimentation(obj)
 	# motion(obj)
 	legs = get_legs(asterix)
-	while 1:
-		rotation(asterix,100,50,-60)
+	walk_first_way()
+
+
 	#moving_all_legs(asterix,100,30,-110,legs)
 	# time.sleep(1)
 	# for m in obj.motors:
