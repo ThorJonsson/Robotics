@@ -174,9 +174,11 @@ def rotation(asterix,y,y25,z):
 
 """ NEW STUFF """
 """ Written by Thor the 24/03/15 """
+""" Tested by Corentin the 24/03/15 """
 # This function takes care of 1 leg at a time
 # This moves the leg given polar coordinates. Important because we when we need to do a rotation the legs should not move
 # outside the circle of rotation. We want a perfect rotation!
+# TEST : Working perfectly
 def move_leg(theta,z,leg,R = 100):
 	
 	i=0
@@ -193,6 +195,7 @@ def move_leg(theta,z,leg,R = 100):
 
 # This should just give us our initial spider position
 # We also use this function when rotating to refix the legs' frames of reference
+# TEST : We SHOULD NOT put negative value in this function (otehrwise the legs (except legs 1-4) will 'meet each other')
 def moving_center(asterix,theta,z = -60):
 	# Experiments have shown that using the values 100 and 30 for changing x and y respectively is working okay
 	move_leg(0,z,legs[0])
@@ -204,7 +207,10 @@ def moving_center(asterix,theta,z = -60):
 
 	time.sleep(0.2)
 
-# max_angle = 20 is just a guess.
+# max_angle = 20 is just a guess. 
+# TEST : Working not too bad. beta = 180 are doing a rotation of 90deg. It seems that we have to multiply the wanted value by 2 to have a proper rotation
+# TEST : If we put negative value fot the beta angle, this is just not working.
+# TEST : If the value of max_angle is not 20, the rotation does not work proprely
 def arbitrary_rotation(asterix,beta, max_angle = 20):
 # Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
 # This gives us the number of rotations we need to make by a predefined max_angle 
@@ -214,7 +220,7 @@ def arbitrary_rotation(asterix,beta, max_angle = 20):
 	r = beta%max_angle
 	
 	# rotate by max_angle q times
-	for i in range(1,q)
+	for i in range(1,q):
 		rotation_angle(asterix,max_angle)
 
 	# finally rotate by r 
@@ -228,10 +234,11 @@ See the draft implementation for arbitrary_rotation above.
 # theta is the value we need to set the initial position
 # alpha determines the amount of rotation (made by each call to the function) from this initial position
 # alpha is physically limited because of the legs. We should define this limit as max_angle - see above.
+# TEST : A value of 45 will make the legs (2-3 and 4-5) touch for a little while (actually until the next leg move)
 def rotation_angle(asterix,alpha,theta = 15):
 	#clockwise 2 and 5 are limited
-	breaklength = 1.5
-	z = -60
+	breaklength = 0.2
+	z = -60	#TEST : We should keep this value, otherwise the rotation won't work.
 
 	# Position 1: The 'spider' position. This position has a low center of gravity. 
 	# Here we define the initial position. i.e. the spider position
@@ -388,10 +395,21 @@ def walk_straight(asterix,x,y,z, legs, l=63.7):
 if __name__ == '__main__':
 	# detection()
 	asterix = initialize()
+	time.sleep(2)
+	# asterix = pypot.robot.from_json('my_robot.json')
+
 	# experimentation(obj)
 	# motion(obj)
 	legs = get_legs(asterix)
-	walk_first_way()
+	
+	arbitrary_rotation(asterix,360)
+
+
+
+
+
+
+	# walk_first_way()
 
 
 	#moving_all_legs(asterix,100,30,-110,legs)
