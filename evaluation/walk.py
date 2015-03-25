@@ -52,7 +52,7 @@ def move_leg(x,y,z,leg):
 	# tupl is a vector that carries the angles that represent the final position of the tip of the leg
 	# the angles are calculated from the arguments of the function using inverse kinematics
 	tupl = leg_ik(x,y,z)
-	for m in leg:
+	for m in leg.joints:
 		m.goal_position = tupl[i]
 		i+=1
 

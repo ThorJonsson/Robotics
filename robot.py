@@ -104,7 +104,7 @@ def romantic_walk(asterix,x,y,z):
 	# position 3
 	# How does the center move?
 	# TODO: define steplengths for each of the legs
-	moving_center(asterix,x,y,z,legs)
+	initial_pos(asterix,x,y,z,legs)
 	# position 4 we lift legs 1 and 4
 	move_leg(100,0,z + 10,legs[0])
 	move_leg(100,0,z + 10,legs[3])
@@ -144,8 +144,9 @@ def moving_center(asterix,x,y,z,l=63.7):
 	move_leg(100-y,-30-x,z,legs[2])
 	time.sleep(0.2)
 
-def walk_gait(asterix):
-	
+def walk_gait(asterix, theta = 15, z = -60):
+	# First we go into initial position 
+	initial_pos(asterix, theta, z)	
 
 """--------------------- Rotation Functions ---------------------------"""
 """ Written by Thor the 24/03/15 """
@@ -164,7 +165,7 @@ def move_leg(theta,z,leg,R = 100):
 	x = R*math.cos(math.radians(theta))
 	y = R*math.sin(math.radians(theta))
 	motor_angles = leg_ik(x,y,z)
-	for m in leg:
+	for m in leg.joints:
 		m.goal_position = motor_angles[i]
 		i+=1
 
