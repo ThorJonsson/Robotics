@@ -68,8 +68,8 @@ def move_leg(theta,z,leg,R = 100):
 	# The angles are calculated from the arguments of the function using inverse kinematics
 	# R is the radius of the circle of rotation. Theta is given in degrees. 
 	# Lets transform our polar coordinates onto the Cartesian plane
-	x = R_leg(theta,leg,R)*math.cos(math.radians(theta))
-	y = R_leg(theta,leg,R)*math.sin(math.radians(theta))
+	x = R_leg(theta,leg,R)*math.cos(math.radians(theta))+leg.xCorrection
+	y = R_leg(theta,leg,R)*math.sin(math.radians(theta))+leg.yCorrection
 	motor_angles = leg_ik(x,y,z)
 	for m in leg.joints:
 		m.goal_position = motor_angles[i]
