@@ -27,12 +27,36 @@
         }
     },
     "motorgroups":{
-       "leg1": ["motor_11","motor_12","motor_13"],
-       "leg2": ["motor_21","motor_22","motor_23"],
-       "leg3": ["motor_31","motor_32","motor_33"],
-       "leg4": ["motor_41","motor_42","motor_43"],
-       "leg5": ["motor_51","motor_52","motor_53"],
-       "leg6": ["motor_61","motor_62","motor_63"]
+       "leg0":{
+         "joints": ["motor_11","motor_12","motor_13"],
+         "xCorrection": 0,
+         "yCorrection": 0
+         },
+       "leg1":{
+         "joints": ["motor_21","motor_22","motor_23"],
+         "xCorrection": 0,
+         "yCorrection": 0
+         },
+       "leg2":{
+         "joints": ["motor_31","motor_32","motor_33"],
+         "xCorrection": 0,
+         "yCorrection": 0
+         },
+       "leg3":{
+         "joints": ["motor_41","motor_42","motor_43"],
+         "xCorrection": 0,
+         "yCorrection": 0
+         },
+       "leg4":{
+         "joints": ["motor_51","motor_52","motor_53"],
+         "xCorrection": 0,
+         "yCorrection": 0
+         },
+       "leg5":{
+         "joints": ["motor_61","motor_62","motor_63"],
+         "xCorrection": 0,
+         "yCorrection": 0
+         }
     },
     "motors":{
         "motor_42":{

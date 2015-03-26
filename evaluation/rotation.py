@@ -39,6 +39,24 @@ def get_legs(obj):
 """ Written by Thor the 24/03/15 """
 """ Tested by Corentin the 24/03/15 """
 
+
+""" -------------------Mathematics to correct the rotation ------------"""
+""" Written by Thor the 26/04/15"""
+# This needs to be done so that we can define a common circle of rotation
+# for all the legs. To communicate this common information to all the legs
+# we need to express the radius of this common circle of rotation as a function of theta and the legs 
+""" I added the attributes needed to obtain this information to the json file
+Currently these attributes are set to zero"""
+def R_leg(theta,leg,R):
+	cos = math.cos(math.radians(theta))
+	sin = math.sin(math.radians(theta))
+	tmp = (leg.xCorrection**2)*((cos**2)-1)
+	tmp += (leg.yCorrection**2)*((sin**2)-1)
+	tmp += leg.xCorrection*leg.yCorrection*math.sin(2*theta)
+	tmp += R**2
+	R _leg = -leg.xCorrection*cos - leg.yCorrection*sin + math.sqrt(tmp) 
+
+
 # This function takes care of 1 leg at a time
 # This moves the leg given polar coordinates. Important because we when we need to do a rotation the legs should not move
 # outside the circle of rotation. We want a perfect rotation!
@@ -50,10 +68,10 @@ def move_leg(theta,z,leg,R = 100):
 	# The angles are calculated from the arguments of the function using inverse kinematics
 	# R is the radius of the circle of rotation. Theta is given in degrees. 
 	# Lets transform our polar coordinates onto the Cartesian plane
-	x = R*1.6*math.cos(math.radians(theta))
-	y = R*1.6*math.sin(math.radians(theta))
+	x = R_leg(theta,leg,R)*math.cos(math.radians(theta))
+	y = R_leg(theta,leg,R)*math.sin(math.radians(theta))
 	motor_angles = leg_ik(x,y,z)
-	for m in leg:
+	for m in leg.joints:
 		m.goal_position = motor_angles[i]
 		i+=1
 
