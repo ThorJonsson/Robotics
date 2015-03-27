@@ -1,17 +1,16 @@
-import itertools
-import time
-import numpy
-from pypot.dynamixel import autodetect_robot
-import pypot.dynamixel
-import math
-import json
-import time
-from contextlib import closing
-
+import time #used for the sleep function
+from pypot.dynamixel import autodetect_robot	#used to get the robot object
+import pypot.dynamixel	#used to get the motors,legs etc.
+import math #quite obvious
+import json	#to use a json file
+from contextlib import closing	#to close properly the robot at  the end
 import pypot.robot
 
 asterix = None
 legs = []
+xCorrection = [80,0,0,80,0,0]
+yCorrection = [0,0,0,0,0,0]
+
 
 
 def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
@@ -35,6 +34,14 @@ def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
 def get_legs(obj):
     return [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
 
+def get_xCorrection(leg):
+	i = int(leg[0].id*0.1)
+	return xCorrection[i-1]
+
+def get_yCorrection(leg):
+	i = int(leg[0].id*0.1)
+	return yCorrection[i-1]
+
 """--------------------- Rotation Functions ---------------------------"""
 """ Written by Thor the 24/03/15 """
 """ Tested by Corentin the 24/03/15 """
@@ -48,32 +55,36 @@ def get_legs(obj):
 """ I added the attributes needed to obtain this information to the json file
 Currently these attributes are set to zero"""
 def R_leg(theta,leg,R):
+	xCorrection = get_xCorrection(leg)
+	yCorrection = get_yCorrection(leg)
 	cos = math.cos(math.radians(theta))
 	sin = math.sin(math.radians(theta))
-	tmp = (leg.xCorrection**2)*((cos**2)-1)
-	tmp += (leg.yCorrection**2)*((sin**2)-1)
-	tmp += leg.xCorrection*leg.yCorrection*math.sin(2*theta)
+	tmp = (xCorrection**2)*((cos**2)-1)
+	tmp += (yCorrection**2)*((sin**2)-1)
+	tmp += xCorrection*yCorrection*math.sin(math.radians(2*theta))
 	tmp += R**2
-	R _leg = -leg.xCorrection*cos - leg.yCorrection*sin + math.sqrt(tmp) 
+	return (-xCorrection*cos - yCorrection*sin + math.sqrt(tmp))
 
 
 # This function takes care of 1 leg at a time
 # This moves the leg given polar coordinates. Important because we when we need to do a rotation the legs should not move
 # outside the circle of rotation. We want a perfect rotation!
 # TEST : Working perfectly
-def move_leg(theta,z,leg,R = 100):
+def move_leg(theta,z,leg,R = 150):
 	
 	i=0
 	# Tupl is a vector that carries the angles that represent the final position of the tip of the leg
 	# The angles are calculated from the arguments of the function using inverse kinematics
 	# R is the radius of the circle of rotation. Theta is given in degrees. 
 	# Lets transform our polar coordinates onto the Cartesian plane
-	x = R_leg(theta,leg,R)*math.cos(math.radians(theta))+leg.xCorrection
-	y = R_leg(theta,leg,R)*math.sin(math.radians(theta))+leg.yCorrection
+	# print R_leg(theta,leg,R), " - ", leg[0].id
+	x = R_leg(theta,leg,R)*math.cos(math.radians(theta))+get_xCorrection(leg)
+	y = R_leg(theta,leg,R)*math.sin(math.radians(theta))+get_yCorrection(leg)
 	motor_angles = leg_ik(x,y,z)
-	for m in leg.joints:
+	for m in leg:
 		m.goal_position = motor_angles[i]
 		i+=1
+	return (x,y)
 
 # This should just give us our initial spider position
 # We also use this function when rotating to refix the legs' frames of reference
@@ -81,14 +92,17 @@ def move_leg(theta,z,leg,R = 100):
 #TEST : We SHOULD NOT put negative value in this function (otehrwise the legs (except legs 1-4) will 'meet each other')
 def initial_pos(asterix,theta,z):
 	# Experiments have shown that using the values 100 and 30 for changing x and y respectively is working okay
-	move_leg(0,z,legs[0])
-	move_leg(-abs(theta),z,legs[1])
-	move_leg(abs(theta),z,legs[2])
-	move_leg(0,z,legs[3])
-	move_leg(-abs(theta),z,legs[4])
-	move_leg(abs(theta),z,legs[5])
+	initial_position = []
+	initial_position.append(move_leg(0,z,legs[0]))
+	initial_position.append(move_leg(-abs(theta),z,legs[1]))
+	initial_position.append(move_leg(abs(theta),z,legs[2]))
+	initial_position.append(move_leg(0,z,legs[3]))
+	initial_position.append(move_leg(-abs(theta),z,legs[4]))
+	initial_position.append(move_leg(abs(theta),z,legs[5]))
 
-	time.sleep(0.3)
+	time.sleep(0.1)
+
+	return initial_position
 
 """
 TODO: make sure that this works. If it works than we can easily do experiments to find the highest value on alpha
@@ -101,7 +115,7 @@ See the draft implementation for arbitrary_rotation above.
 # TEST : A value of 45 will make the legs (2-3 and 4-5) touch for a little while (actually until the next leg move)
 def rotation_angle(asterix,alpha,theta,z):
 	#clockwise 2 and 5 are limited
-	breaklength = 0.3
+	breaklength = 0.1
 	# Position 1: The 'spider' position. This position has a low center of gravity. 
 	# Here we define the initial position. i.e. the spider position
 	# It is important to observe the x and y values of each leg in its own frame of reference
@@ -137,7 +151,7 @@ def rotation_angle(asterix,alpha,theta,z):
 # TEST : If the value of max_angle is not 20, the rotation does not work proprely
 # theta and z are simply values that determine the initial position
 # Other parameters are to define the rotation
-def arbitrary_rotation(asterix,beta, max_angle = 20, theta = 15, z = -60):
+def arbitrary_rotation(asterix,beta, max_angle = 20, theta = 45, z = -60):
 # Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
 # This gives us the number of rotations we need to make by a predefined max_angle 
 # The remainder gives us the amount we need to rotate by to be able to finish the full rotation by an angle of beta

@@ -1,19 +1,17 @@
-import itertools
-import time
-import numpy
-from pypot.dynamixel import autodetect_robot
-import pypot.dynamixel
-import math
-import json
-import time
-from contextlib import closing
-import Tkinter as tk
-
+import time #used for the sleep function
+from pypot.dynamixel import autodetect_robot	#used to get the robot object
+import pypot.dynamixel	#used to get the motors,legs etc.
+import math #quite obvious
+import json	#to use a json file
+from contextlib import closing	#to close properly the robot at  the end
 import pypot.robot
+
+import Tkinter as tk # to get the a graphic interface for the control function
+
 
 asterix = None
 legs = []
-
+initial = []
 
 def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
     d13 = math.sqrt(x3*x3 + y3*y3) - l1
@@ -46,15 +44,18 @@ Get the legs of the given robot object (from the json file).
 def get_legs(obj):
 	return [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
 
-def move_leg(x,y,z,leg):
-	
-	i=0
-	# tupl is a vector that carries the angles that represent the final position of the tip of the leg
-	# the angles are calculated from the arguments of the function using inverse kinematics
-	tupl = leg_ik(x,y,z)
-	for m in leg.joints:
-		m.goal_position = tupl[i]
-		i+=1
+# def move_leg(x,y,z,leg):
+# 	i=0
+# 	# tupl is a vector that carries the angles that represent the final position of the tip of the leg
+# 	# the angles are calculated from the arguments of the function using inverse kinematics
+# 	tupl = leg_ik(x,y,z)
+# 	for m in leg:
+# 		m.goal_position = tupl[i]
+# 		i+=1
+
+def move_leg(L,leg):
+	theta = leg[0].goal_position
+
 
 def moving_all_legs(asterix,x,y,z,legs):
 	tupl = leg_ik(x,y,z)
@@ -68,7 +69,7 @@ def moving_all_legs(asterix,x,y,z,legs):
 
 """
 TODO: Currently the function is not using all the parameters. What happens when we replace current arguments to move_leg?
-We need to be able to use arbitrary values. Au moins we need to be able to answer why we have choosen the current values
+We need to be able to use arbitrary values. At least we need to be able to answer why we have choosen the current values
 """
 def romantic_walk(asterix,x,y,z):
 	breaklength = 0.2
