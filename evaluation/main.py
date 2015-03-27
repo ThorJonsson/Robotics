@@ -18,6 +18,14 @@ asterix = None
 legs = []
 
 
+def get_object():
+	asterix = pypot.robot.from_json('my_robot.json')
+	legs = get_legs(asterix)
+	rotation.legs = get_legs(asterix)
+	walk.legs = get_legs(asterix)
+
+	return asterix
+
 def detection():
 
 	my_robot = autodetect_robot() #detect al the legs of the robot. Might take a while to operate.
@@ -54,15 +62,21 @@ def get_legs(obj):
 
 if __name__ == '__main__':
     
-	asterix = initialize()
-	rotation.legs = get_legs(asterix)
+	asterix = get_object()
+	initialize()
+	walk.initial = rotation.initial_pos(asterix,0,-60)
+	# time.sleep(2)
+	# walk.move_leg(30,0,rotation.legs[0])
+	# time.sleep(1)
+	# walk.move_leg(30,-60,rotation.legs[0])
+	# time.sleep(1)
+	while 1:
+		walk.initial = rotation.initial_pos(asterix,0,-60)
+		time.sleep(0.2)
+		walk.move_center_forward(30,-60)
+		walk.initial = rotation.initial_pos(asterix,0,-60)
+		time.sleep(0.2)
 
-	walk.legs = get_legs(asterix)
-	walk.initial = rotation.initial_pos(asterix,0,-80)
-	print "walk.initial() : ",walk.initial
-	time.sleep(2)
-	walk.move_leg(30,walk.legs[0])
-	time.sleep(0.2)
     # print rotation.legs[0][0].id
 	# rotation.move_leg(0,-60,rotation.legs[0])
 	# rotation.arbitrary_rotation(asterix,720)

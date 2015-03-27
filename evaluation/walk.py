@@ -5,6 +5,7 @@ import math #quite obvious
 import json	#to use a json file
 from contextlib import closing	#to close properly the robot at  the end
 import pypot.robot
+import rotation
 
 import Tkinter as tk # to get the a graphic interface for the control function
 
@@ -59,30 +60,57 @@ def get_legs(obj):
 		leg -- The leg we want to move
 		initial -- a tuple with three values wich correspond to the intial coordonnate of the end of the leg
 """
-def move_leg(L,leg):
+def move_leg(L,z,leg):
 	num = int(leg[0].id*0.1)-1
-	print "num:{0}--initial[0]{1}--initial[1]{2}".format(num,initial[num][0],initial[num][1])
 	theta = math.atan(initial[num][1]/initial[num][0])
 	hypo = math.sqrt(initial[num][0]**2 + initial[num][1]**2)
-	print "theta : ",theta
 	x = math.cos(theta)*(hypo+L)
 	y = math.sin(theta)*(hypo+L)
-	z = initial[num][2]
+	z = z
 	angles = leg_ik(x,y,z)
-	print angles
 	i=0
 	for motors in leg:
 		motors.goal_position = angles[i]
 		i+=1
+""""
+Make the robot move along his two separate legs
+"""
+def move_center_forward(L,z):
+	break_length = 1
+	theta = 20	#more than 20 would make the legs touch for a sec (because of the speed)
+	order = [1,5,2,4]
+	if L<0:
+		order = [4,2,5,1]
 
-def moving_all_legs(asterix,x,y,z,legs):
-	tupl = leg_ik(x,y,z)
-	move_leg(x,y,z,legs[0])
-	move_leg(x,y,z,legs[2])
-	move_leg(x,y,z,legs[1])
-	move_leg(x,y,z,legs[3])
-	move_leg(x,y,z,legs[5])
-	move_leg(x,y,z,legs[4])
+	move_leg(L,z+40,legs[0])
+	move_leg(-L,z+40,legs[3])
+	time.sleep(break_length)
+
+	move_leg(L,z,legs[0])
+	move_leg(-L,z,legs[3])
+	time.sleep(break_length)
+	for i in order:
+		if i==order[0] or i==order[2]:
+			rotation.move_leg(-theta,z+40,legs[i])
+		else:
+			rotation.move_leg(theta,z+40,legs[i])
+			time.sleep(break_length)
+	for i in order:
+		if i==order[0] or i==order[2]:
+			rotation.move_leg(-theta,z,legs[i])
+		else:
+			rotation.move_leg(theta,z,legs[i])
+			time.sleep(break_length)
+	time.sleep(break_length)
+
+def moving_all_legs(L,z):
+	move_leg(L,z,legs[0])
+	move_leg(L,z,legs[1])
+	move_leg(L,z,legs[2])
+	move_leg(-L,z,legs[3])
+	move_leg(L,z,legs[4])
+	move_leg(L,z,legs[5])
+	
 # Before the center is in (0,0,-60)
 
 """
