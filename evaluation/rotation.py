@@ -84,7 +84,7 @@ def move_leg(theta,z,leg,R = 150):
 	for m in leg:
 		m.goal_position = motor_angles[i]
 		i+=1
-	return (x,y)
+	return (x,y,z)
 
 # This should just give us our initial spider position
 # We also use this function when rotating to refix the legs' frames of reference

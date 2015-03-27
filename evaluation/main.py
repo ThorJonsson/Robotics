@@ -59,7 +59,9 @@ if __name__ == '__main__':
 
 	walk.legs = get_legs(asterix)
 	walk.initial = rotation.initial_pos(asterix,0,-80)
-	# walk.move_leg(20,50,-110,walk.legs[0])
+	print "walk.initial() : ",walk.initial
+	time.sleep(2)
+	walk.move_leg(30,walk.legs[0])
 	time.sleep(0.2)
     # print rotation.legs[0][0].id
 	# rotation.move_leg(0,-60,rotation.legs[0])

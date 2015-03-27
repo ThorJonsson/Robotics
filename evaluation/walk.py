@@ -52,10 +52,28 @@ def get_legs(obj):
 # 	for m in leg:
 # 		m.goal_position = tupl[i]
 # 		i+=1
-
+"""
+	Makes one leg move.
+	parameters:
+		L -- The length between the start point and the end point (in a right line)
+		leg -- The leg we want to move
+		initial -- a tuple with three values wich correspond to the intial coordonnate of the end of the leg
+"""
 def move_leg(L,leg):
-	theta = leg[0].goal_position
-
+	num = int(leg[0].id*0.1)-1
+	print "num:{0}--initial[0]{1}--initial[1]{2}".format(num,initial[num][0],initial[num][1])
+	theta = math.atan(initial[num][1]/initial[num][0])
+	hypo = math.sqrt(initial[num][0]**2 + initial[num][1]**2)
+	print "theta : ",theta
+	x = math.cos(theta)*(hypo+L)
+	y = math.sin(theta)*(hypo+L)
+	z = initial[num][2]
+	angles = leg_ik(x,y,z)
+	print angles
+	i=0
+	for motors in leg:
+		motors.goal_position = angles[i]
+		i+=1
 
 def moving_all_legs(asterix,x,y,z,legs):
 	tupl = leg_ik(x,y,z)
