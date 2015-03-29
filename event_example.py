@@ -17,7 +17,7 @@ def initial(event):
 
 root = Tk()
 
-root.bind("<Up>",up)
+root.bind("<Return>",up)
 root.bind("<Down>",down)
 root.bind("<Right>",right)
 root.bind("<Left>",left)
