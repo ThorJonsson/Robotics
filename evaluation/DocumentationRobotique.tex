@@ -1,9 +1,9 @@
 %!TEX encoding = UTF-8 Unicode
 \documentclass[11pt, a4paper]{article}
 
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-
-\usepackage[icelandic]{babel}
+\usepackage[french]{babel}
 \usepackage{amsmath, amsthm, amssymb, amsfonts}
 \usepackage[top=2cm, left=1.2cm, right=1.2cm]{geometry}
 \usepackage{hyperref}
@@ -101,9 +101,90 @@
 %%%% END OF SETUP %%%%
 
 \begin{document}
+%%%% Frontpage %%%%%%
+\begin{titlepage}
 
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % 
+\center % Höfum allt á blaðsíðunni fyrir miðju
+
+%----------------------------------------------------------------------------------------
+% Forsiðumynd
+%----------------------------------------------------------------------------------------
+
+\begin{center}
+\begin{minipage}{0.4\textwidth}
+\end{minipage}\\[1cm]
+%\vspace{2cm}
+  % Upper part of the page
+  \includegraphics[width=10cm]{logo.jpg}\\[1cm]
+\end{center}
+%----------------------------------------------------------------------------------------
+% Heiti skóla
+%----------------------------------------------------------------------------------------
+ % Nafn skola
+%\textsc{\Large Informatique}\\[0.25cm]
+%Þetta:[xcm] segir til um bil fyrir neðan línu
+
+%----------------------------------------------------------------------------------------
+% Titill
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm] %Lárétt lina
+{ \huge \bfseries Introduction à la robotique par la pratique}\\[0.5cm] % Titill ritgerðar
+\textsc{\Large Documentation de Projet}\\[0.5cm] 
+\HRule \\[1.5cm]  %Lárétt lína
+ 
+%------------------------------
+% Höfundur
+%------------------------------
+
+\begin{minipage}{0.4\textwidth} %Setjum minipage með breidd 0.4 af breidd texta
+\begin{flushleft} \large %Höfum þetta til vinstri
+\emph{Étudiants:}
+\\
+Corentin Charles
+\\
+Clément Renazeau
+\\
+Þorsteinn Hjörtur Jónsson % Nafn Höfundar
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large %Höfum þetta til hægri
+\vspace{-1cm}
+\emph{Enseigneurs:} 
+\\
+Rémi Fabre
+\\
+
+ % Nafn Kennara
+\end{flushright}
+\end{minipage}\\[3cm]
+%-----------------------------
+%   Dagsetning
+%-----------------------------
+\nopagebreak      %Við skulum ekki fara á nýja blaðsíðu
+{\large \today}\\[3cm] % Gott er að vita dagsetninguna
+\null
+\end{titlepage}
+\clearpage
+\section{Introduction}
+This is the introduction.\\
+\clearpage
+\section{Rotation}
+\subsection{Description}
+\subsection{Program}
 \lstinputlisting[language=python]{rotation.py}
+\clearpage
+\section{Walk}
+\subsection{Description}
+\subsection{Program}
 \lstinputlisting[language=python]{walk.py}
+\clearpage
+\section{Main}
+\subsection{Description}
+\subsection{Program}
 \lstinputlisting[language=python]{main.py}
 \clearpage
 
