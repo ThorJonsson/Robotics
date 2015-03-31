@@ -1,0 +1,195 @@
+%!TEX encoding = UTF-8 Unicode
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage[top=2cm, left=1.2cm, right=1.2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{fixltx2e}
+\usepackage{enumerate}
+
+\usepackage{listings}
+\usepackage{color}
+\lstset{ %
+  language=Matlab,                     % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{mygray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{mygreen},   % comment style
+  stringstyle=\color{mymauve},      % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+} 
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+%%%%%%% SETUP %%%%%%%%
+
+% Header and footer
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancy}
+\lhead{Robotique }
+\rhead{Documentation}
+\chead{Asterix}
+
+%%%% END OF SETUP %%%%
+
+\begin{document}
+%%%% Frontpage %%%%%%
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % 
+\center % Höfum allt á blaðsíðunni fyrir miðju
+
+%----------------------------------------------------------------------------------------
+% Forsiðumynd
+%----------------------------------------------------------------------------------------
+
+\begin{center}
+\begin{minipage}{0.4\textwidth}
+\end{minipage}\\[1cm]
+%\vspace{2cm}
+  % Upper part of the page
+  \includegraphics[width=10cm]{logo.jpg}\\[1cm]
+\end{center}
+%----------------------------------------------------------------------------------------
+% Heiti skóla
+%----------------------------------------------------------------------------------------
+ % Nafn skola
+%\textsc{\Large Informatique}\\[0.25cm]
+%Þetta:[xcm] segir til um bil fyrir neðan línu
+
+%----------------------------------------------------------------------------------------
+% Titill
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm] %Lárétt lina
+{ \huge \bfseries Introduction à la robotique par la pratique}\\[0.5cm] % Titill ritgerðar
+\textsc{\Large Documentation de Projet}\\[0.5cm] 
+\HRule \\[1.5cm]  %Lárétt lína
+ 
+%------------------------------
+% Höfundur
+%------------------------------
+
+\begin{minipage}{0.4\textwidth} %Setjum minipage með breidd 0.4 af breidd texta
+\begin{flushleft} \large %Höfum þetta til vinstri
+\emph{Étudiants:}
+\\
+Corentin Charles
+\\
+Clément Renazeau
+\\
+Þorsteinn Hjörtur Jónsson % Nafn Höfundar
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large %Höfum þetta til hægri
+\vspace{-1cm}
+\emph{Enseigneurs:} 
+\\
+Rémi Fabre
+\\
+
+ % Nafn Kennara
+\end{flushright}
+\end{minipage}\\[3cm]
+%-----------------------------
+%   Dagsetning
+%-----------------------------
+\nopagebreak      %Við skulum ekki fara á nýja blaðsíðu
+{\large \today}\\[3cm] % Gott er að vita dagsetninguna
+\null
+\end{titlepage}
+\clearpage
+\section{Introduction}
+This is the introduction.\\
+\clearpage
+\section{Rotation}
+\subsection{Description}
+\subsection{Program}
+\lstinputlisting[language=python]{rotation.py}
+\clearpage
+\section{Walk}
+\subsection{Description}
+\subsection{Program}
+\lstinputlisting[language=python]{walk.py}
+\clearpage
+\section{Main}
+\subsection{Description}
+\subsection{Program}
+\lstinputlisting[language=python]{main.py}
+\clearpage
+
+\vspace{1.5cm}
+
+
+
+\end{document}
