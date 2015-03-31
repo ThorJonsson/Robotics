@@ -8,7 +8,7 @@ import pypot.robot
 
 asterix = None
 legs = []
-xCorrection = [80,0,0,80,0,0]
+xCorrection = [0,0,0,0,0,0]
 yCorrection = [0,0,0,0,0,0]
 
 
@@ -20,16 +20,23 @@ def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
     a1 = z3 / d13
     a2 = (l2**2 + l3**2 - d**2)/(2*l2*l3)
 	
-    angles = (None,None,None)
-    theta1 = math.degrees(math.atan2(y3,x3))   # OK
+    angles = (0,0,0)
+    theta1 = angles[0]
+    theta2 = angles[1]
+    theta3 = angles[2]
 
-    theta2 = math.degrees(math.atan(a1) + math.acos(tmp)) 
-    theta3 = 180 - math.degrees(math.acos(a2))
-# Corrections to the angles theta2 and theta3
-    theta2 = -(theta2 + alpha)
-    theta3 = -(theta3 - 90 + alpha + beta)
-    angles = (theta1,theta2,theta3)
-    return angles 
+    try:
+        theta1 = math.degrees(math.atan2(y3,x3))   # OK
+        theta2 = math.degrees(math.atan(a1) + math.acos(tmp))
+        theta3 = 180 - math.degrees(math.acos(a2))
+        # Corrections to the angles theta2 and theta3
+        theta2 = -(theta2 + alpha)
+        theta3 = -(theta3 - 90 + alpha + beta)
+        angles = (theta1,theta2,theta3)
+    except ValueError:
+        print "The legs of the robot cannot go that far!!"
+        
+    return angles
 
 def get_legs(obj):
     return [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
@@ -54,7 +61,7 @@ def get_yCorrection(leg):
 # we need to express the radius of this common circle of rotation as a function of theta and the legs 
 """ I added the attributes needed to obtain this information to the json file
 Currently these attributes are set to zero"""
-def R_leg(theta,leg,R):
+def R_leg(theta,leg,R_center):
 	xCorrection = get_xCorrection(leg)
 	yCorrection = get_yCorrection(leg)
 	cos = math.cos(math.radians(theta))
@@ -62,7 +69,7 @@ def R_leg(theta,leg,R):
 	tmp = (xCorrection**2)*((cos**2)-1)
 	tmp += (yCorrection**2)*((sin**2)-1)
 	tmp += xCorrection*yCorrection*math.sin(math.radians(2*theta))
-	tmp += R**2
+	tmp += R_center**2
 	return (-xCorrection*cos - yCorrection*sin + math.sqrt(tmp))
 
 
@@ -70,7 +77,7 @@ def R_leg(theta,leg,R):
 # This moves the leg given polar coordinates. Important because we when we need to do a rotation the legs should not move
 # outside the circle of rotation. We want a perfect rotation!
 # TEST : Working perfectly
-def move_leg(theta,z,leg,R = 150):
+def move_leg(theta,z,leg,R_center = 100):
 	
 	i=0
 	# Tupl is a vector that carries the angles that represent the final position of the tip of the leg
@@ -78,8 +85,8 @@ def move_leg(theta,z,leg,R = 150):
 	# R is the radius of the circle of rotation. Theta is given in degrees. 
 	# Lets transform our polar coordinates onto the Cartesian plane
 	# print R_leg(theta,leg,R), " - ", leg[0].id
-	x = R_leg(theta,leg,R)*math.cos(math.radians(theta))+get_xCorrection(leg)
-	y = R_leg(theta,leg,R)*math.sin(math.radians(theta))+get_yCorrection(leg)
+	x = R_leg(theta,leg,R_center)*math.cos(math.radians(theta))
+	y = R_leg(theta,leg,R_center)*math.sin(math.radians(theta))
 	motor_angles = leg_ik(x,y,z)
 	for m in leg:
 		m.goal_position = motor_angles[i]

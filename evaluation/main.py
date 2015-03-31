@@ -47,10 +47,12 @@ def initialize():
 	# and the orders will not be directly sent
 	# (they will be sent during the next write loop iteration).
 	for m in asterix.motors:
-	    print m.present_position
 	    m.compliant = False		# <=> enable_torque.
 	    m.goal_position = 0
 
+	time.sleep(2)
+	return asterix
+"""
 	if asterix['motorgroups'] == None:
 		asterix['motorgroups'] = {
 		'leg1': ["motor_11","motor_12","motor_13"],
@@ -60,8 +62,7 @@ def initialize():
 		'leg5': ["motor_51","motor_52","motor_53"],
 		'leg6': ["motor_61","motor_62","motor_63"]
 		}
-	time.sleep(2)
-	return asterix
+"""
 
 def get_legs(obj):
     return [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
@@ -71,6 +72,7 @@ if __name__ == '__main__':
 	# asterix = get_object()
 	initialize()
 	walk.initial = rotation.initial_pos(asterix,30,-60)
+	#rotation.arbitrary_rotation(asterix,360)
 	# time.sleep(2)
 	# walk.move_leg(30,0,rotation.legs[0])
 	# time.sleep(1)
@@ -88,5 +90,5 @@ if __name__ == '__main__':
 	# 	time.sleep(0.2)
 
     # print rotation.legs[0][0].id
-	# rotation.move_leg(0,-60,rotation.legs[0])
-	# rotation.arbitrary_rotation(asterix,720)
+	rotation.move_leg(0,-60,rotation.legs[0])
+	
