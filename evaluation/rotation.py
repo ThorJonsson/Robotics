@@ -97,7 +97,7 @@ def move_leg(theta,z,leg,R_center = 100):
 # We also use this function when rotating to refix the legs' frames of reference
 """SOLVED?"""
 #TEST : We SHOULD NOT put negative value in this function (otehrwise the legs (except legs 1-4) will 'meet each other')
-def initial_pos(asterix,theta,z):
+def initial_pos(theta,z):
 	# Experiments have shown that using the values 100 and 30 for changing x and y respectively is working okay
 	initial_position = []
 	initial_position.append(move_leg(0,z,legs[0]))
@@ -107,7 +107,7 @@ def initial_pos(asterix,theta,z):
 	initial_position.append(move_leg(-abs(theta),z,legs[4]))
 	initial_position.append(move_leg(abs(theta),z,legs[5]))
 
-	time.sleep(1)
+	time.sleep(0.1)
 
 	return initial_position
 
@@ -120,9 +120,9 @@ See the draft implementation for arbitrary_rotation above.
 # alpha determines the amount of rotation (made by each call to the function) from this initial position
 # alpha is physically limited because of the legs. We should define this limit as max_angle - see above.
 # TEST : A value of 45 will make the legs (2-3 and 4-5) touch for a little while (actually until the next leg move)
-def rotation_angle(asterix,alpha,theta,z):
+def rotation_angle(alpha,theta,z):
 	#clockwise 2 and 5 are limited
-	breaklength = 1
+	breaklength = 0.1
 	# Position 1: The 'spider' position. This position has a low center of gravity. 
 	# Here we define the initial position. i.e. the spider position
 	# It is important to observe the x and y values of each leg in its own frame of reference
@@ -158,12 +158,12 @@ def rotation_angle(asterix,alpha,theta,z):
 # TEST : If the value of max_angle is not 20, the rotation does not work proprely
 # theta and z are simply values that determine the initial position
 # Other parameters are to define the rotation
-def arbitrary_rotation(asterix,beta, max_angle = 40, theta = 45, z = -60):
+def arbitrary_rotation(beta, max_angle = 40, theta = 45, z = -60):
 # Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
 # This gives us the number of rotations we need to make by a predefined max_angle 
 # The remainder gives us the amount we need to rotate by to be able to finish the full rotation by an angle of beta
 # i.e. beta = q*max_angle + r
-	initial_pos(asterix,theta,z)
+	initial_pos(theta,z)
 	if beta < 0:
 		max_angle = -max_angle
 
@@ -173,18 +173,10 @@ def arbitrary_rotation(asterix,beta, max_angle = 40, theta = 45, z = -60):
 	print r
 	# rotate by max_angle q times
 	for i in range(1,q):
-		rotation_angle(asterix,max_angle, theta, z)
-		initial_pos(asterix,theta,z)
+		rotation_angle(max_angle, theta, z)
+		initial_pos(theta,z)
 	# finally rotate by r 
-	rotation_angle(asterix,r, theta, z)
-	initial_pos(asterix,theta,z)
+	rotation_angle(r, theta, z)
+	initial_pos(theta,z)
 
-def moving_center(asterix,x,y,z,l=63.7):
-	move_leg(100-x,y,z,legs[0])
-	move_leg(100+x,-y,z,legs[3])
-	move_leg(100-y,30-x,z,legs[5])
-	move_leg(100-y,-30-x,z,legs[4])
-	move_leg(100+y,30+x,z,legs[2])
-	move_leg(100+y,-30+x,z,legs[1])
-	time.sleep(2)
 """ ----------------------------------------------------------------------- """

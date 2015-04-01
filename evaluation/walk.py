@@ -106,7 +106,7 @@ def move_center_aside(L,z):
 	if L<0:
 		theta = -theta
 
-	initial = rotation.initial_pos(0,-60)
+	initial = rotation.initial_pos(30,-60)
 	time.sleep(break_length)
 	move_leg(L,z+40,legs[1])
 	move_leg(L,z+40,legs[2])
