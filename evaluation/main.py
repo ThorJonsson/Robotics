@@ -41,7 +41,7 @@ def detection():
     
 def initialize():
 
-	asterix = pypot.robot.from_json('my_robot.json')
+	asterix = get_object()
 	# print asterix
 	# Note that all these calls will return immediately,
 	# and the orders will not be directly sent
@@ -50,10 +50,16 @@ def initialize():
 	    print m.present_position
 	    m.compliant = False		# <=> enable_torque.
 	    m.goal_position = 0
-  	# with closing(pypot.robot.from_json('my_robot.json')) as my_robot:
-	  #   # do stuff without having to make sure not to forget to close my_robot!
-	  #   pass
 
+	if asterix['motorgroups'] == None:
+		asterix['motorgroups'] = {
+		'leg1': ["motor_11","motor_12","motor_13"],
+		'leg2': ["motor_21","motor_22","motor_23"],
+		'leg3': ["motor_31","motor_32","motor_33"],
+		'leg4': ["motor_41","motor_42","motor_43"],
+		'leg5': ["motor_51","motor_52","motor_53"],
+		'leg6': ["motor_61","motor_62","motor_63"]
+		}
 	time.sleep(2)
 	return asterix
 
@@ -62,20 +68,24 @@ def get_legs(obj):
 
 if __name__ == '__main__':
     
-	asterix = get_object()
+	# asterix = get_object()
 	initialize()
-	walk.initial = rotation.initial_pos(asterix,0,-60)
+	walk.initial = rotation.initial_pos(asterix,30,-60)
 	# time.sleep(2)
 	# walk.move_leg(30,0,rotation.legs[0])
 	# time.sleep(1)
 	# walk.move_leg(30,-60,rotation.legs[0])
 	# time.sleep(1)
-	while 1:
-		walk.initial = rotation.initial_pos(asterix,0,-60)
-		time.sleep(0.2)
-		walk.move_center_forward(30,-60)
-		walk.initial = rotation.initial_pos(asterix,0,-60)
-		time.sleep(0.2)
+
+	# while 1:
+	# 	move_center_aside(10,-60)
+
+	# while 1:
+	# 	walk.initial = rotation.initial_pos(asterix,0,-60)
+	# 	time.sleep(0.2)
+	# 	walk.move_center_forward(30,-60)
+	# 	walk.initial = rotation.initial_pos(asterix,0,-60)
+	# 	time.sleep(0.2)
 
     # print rotation.legs[0][0].id
 	# rotation.move_leg(0,-60,rotation.legs[0])
