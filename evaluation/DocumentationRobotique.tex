@@ -97,7 +97,8 @@
 \lhead{Robotique }
 \rhead{Documentation}
 \chead{Asterix}
-
+%%% Custom Commands %%%
+\newcommand{\coord}[2]{\left(#1,#2\right)}
 %%%% END OF SETUP %%%%
 
 \begin{document}
@@ -153,7 +154,7 @@ Clément Renazeau
 \begin{minipage}{0.4\textwidth}
 \begin{flushright} \large %Höfum þetta til hægri
 \vspace{-1cm}
-\emph{Enseignants:} 
+\emph{Enseigneurs:} 
 \\
 Rémi Fabre
 \\
@@ -174,6 +175,18 @@ This is the introduction.\\
 \clearpage
 \section{Rotation}
 \subsection{Description}
+To make Asterix do a rotation we need to define a circle of rotation, with regards to the center of the robot, on which the legs will move on.
+As we should always use inverse kinematics to decide the motor angles we will need to express the the circle of rotation in each legs' coordinate frame. To do this we'll need to translate the coordinates of the center system by the vector $(x_{corr}, y_{corr})$, i.e. a point $\left(x_c,y_c\right)$ in the center system has the coordinates $\left(x_l + x_{corr},y_l+y_{corr}\right)$ with respect to the coordinate system of the leg.\\ 
+The following table shows measurements of this vector. \\
+\vspace{0.5cm}
+\\
+Let $R_c$ be the radius of the circle of rotation. We can define the circle of rotation by $\left(R_c \cos(\theta_c), R_c \sin(\theta_c)\right)$ for $\theta_c \in \left[0,2\pi\right]$.\\
+Let $R_l$ be the distance from the tip of a leg to the origin of the coordinate system which it defines and let $\theta_l \in \left[0,2\pi\right]$ such that $\left(R_l \cos(\theta_l), R_l \sin(\theta_l)\right)$ describes the tip of the leg.\\
+Assume that the tip of a leg is on the circle of rotation. Then, \\
+\begin{center}
+$\coord{R_c\cos(\theta_c)}{R_c\sin(\theta_c)} = \coord{R_l\cos(\theta_l)+x_{corr}}{R_l\sin(\theta_l)+y_{corr}}$.
+\end{center}
+Therefore, 
 \subsection{Program}
 \lstinputlisting[language=python]{rotation.py}
 \clearpage
