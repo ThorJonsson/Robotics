@@ -8,8 +8,8 @@ import pypot.robot
 
 asterix = None
 legs = []
-xCorrection = [0,0,0,0,0,0]
-yCorrection = [0,0,0,0,0,0]
+xCorrection = [10,-20,-20,10,-20,-20]
+yCorrection = [0,-15,15,0,15,-15]
 
 
 
@@ -77,7 +77,7 @@ def R_leg(theta,leg,R_center):
 # This moves the leg given polar coordinates. Important because we when we need to do a rotation the legs should not move
 # outside the circle of rotation. We want a perfect rotation!
 # TEST : Working perfectly
-def move_leg(theta,z,leg,R_center = 200):
+def move_leg(theta,z,leg,R_center = 100):
 	
 	i=0
 	# Tupl is a vector that carries the angles that represent the final position of the tip of the leg
@@ -108,7 +108,7 @@ def initial_pos(asterix,theta,z):
 	initial_position.append(move_leg(-abs(theta),z,legs[4]))
 	initial_position.append(move_leg(abs(theta),z,legs[5]))
 
-	time.sleep(0.1)
+	time.sleep(1)
 
 	return initial_position
 
@@ -123,7 +123,7 @@ See the draft implementation for arbitrary_rotation above.
 # TEST : A value of 45 will make the legs (2-3 and 4-5) touch for a little while (actually until the next leg move)
 def rotation_angle(asterix,alpha,theta,z):
 	#clockwise 2 and 5 are limited
-	breaklength = 0.1
+	breaklength = 1
 	# Position 1: The 'spider' position. This position has a low center of gravity. 
 	# Here we define the initial position. i.e. the spider position
 	# It is important to observe the x and y values of each leg in its own frame of reference
@@ -159,7 +159,7 @@ def rotation_angle(asterix,alpha,theta,z):
 # TEST : If the value of max_angle is not 20, the rotation does not work proprely
 # theta and z are simply values that determine the initial position
 # Other parameters are to define the rotation
-def arbitrary_rotation(asterix,beta, max_angle = 20, theta = 45, z = -60):
+def arbitrary_rotation(asterix,beta, max_angle = 40, theta = 45, z = -60):
 # Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
 # This gives us the number of rotations we need to make by a predefined max_angle 
 # The remainder gives us the amount we need to rotate by to be able to finish the full rotation by an angle of beta

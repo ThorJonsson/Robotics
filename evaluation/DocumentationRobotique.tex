@@ -199,8 +199,11 @@ R_l^2 + 2R_l\left(\cos(\theta_l)+x_{corr}+\sin(\theta_l)+y_{corr}\right) - R_c^2
 \end{equation*}
 The positive root of this equation is:
 \begin{equation*}
-R_l = -x_{corr}\cos(\theta_l)-y_{corr}\sin(\theta_l)+\sqrt{x_{corr}^2\left(\cos^2(\theta_l)-1\right) + y_{corr}^2\left(\sin^2(\theta_l)-1\right)+x_{corr}}
+R_l = -x_{corr}\cos(\theta_l)-y_{corr}\sin(\theta_l)+\sqrt{x_{corr}^2\left(\cos^2(\theta_l)-1\right) + y_{corr}^2\left(\sin^2(\theta_l)-1\right)+x_{corr}y_{corr}\sin(2\theta_l)}
 \end{equation*} 
+So this should give us the radius of each leg as a function of the correction and the angle given.
+\clearpage
+
 \subsection{Program}
 \lstinputlisting[language=python]{rotation.py}
 \clearpage
