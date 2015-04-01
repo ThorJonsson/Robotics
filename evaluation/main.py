@@ -72,7 +72,9 @@ if __name__ == '__main__':
 	# asterix = get_object()
 	initialize()
 	walk.initial = rotation.initial_pos(asterix,30,-60)
-	rotation.arbitrary_rotation(asterix,360)
+	rotation.arbitrary_rotation(180,-60,rotation.legs[0])
+	# We really need to sleep before we die
+	time.sleep(0.1)
 	# time.sleep(2)
 	# walk.move_leg(30,0,rotation.legs[0])
 	# time.sleep(1)

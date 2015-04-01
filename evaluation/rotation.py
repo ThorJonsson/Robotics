@@ -86,7 +86,6 @@ def move_leg(theta,z,leg,R_center = 100):
 	# Lets transform our polar coordinates onto the Cartesian plane
 	# print R_leg(theta,leg,R), " - ", leg[0].id
 	x = R_leg(theta,leg,R_center)*math.cos(math.radians(theta))
-	print x
 	y = R_leg(theta,leg,R_center)*math.sin(math.radians(theta))
 	motor_angles = leg_ik(x,y,z)
 	for m in leg:
