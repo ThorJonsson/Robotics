@@ -46,7 +46,7 @@ def detection():
 	    pass
  
 """
-	Initialize the robot. Firstly get the robot object, and then put the angles of the motor at 0°.
+	Initialize the robot. Firstly get the robot object, and then put the angles of the motor at 0 deg.
 	Return the robot object.
 """    
 def initialize():
@@ -191,7 +191,8 @@ if __name__ == '__main__':
 	#while 1:
 	#	walk.move_center_aside(10,-60)
 	# We really need to sleep before we die
-	rotation.arbitrary_rotation(360)	
+	while 1:
+		walk.move_center_aside(10,-60)	
 	time.sleep(0.1)
 
 	

@@ -112,7 +112,7 @@ Make the robot move along its two legged side.
 """
 def move_center_aside(L,z):
 
-	break_length = 1.2
+	break_length = 1.1
 	theta = 20
 	if L<0:
 		theta = -theta
