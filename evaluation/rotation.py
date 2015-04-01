@@ -6,13 +6,20 @@ import json	#to use a json file
 from contextlib import closing	#to close properly the robot at  the end
 import pypot.robot
 
-asterix = None
 legs = []
 xCorrection = [-10,-20,-20,10,-20,-20]
 yCorrection = [0,-15,15,0,15,-15]
 
 
-
+"""
+	Indirect kinematic function.
+	Parameters : 
+		- (x3,y3,z3) : The coordonnates where we want to put the leg
+		- alpha : the correction for the second motor.
+		- beta : the correction for the third motor.
+		- l2, l3 : the length of the different part of the leg
+	Return a tuple with three values, corresponding to the angles of each motor of the leg.
+"""
 def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
     d13 = math.sqrt(x3*x3 + y3*y3) - l1
     d = math.sqrt(d13*d13 + z3*z3)
@@ -34,18 +41,34 @@ def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
         theta3 = -(theta3 - 90 + alpha + beta)
         angles = (theta1,theta2,theta3)
     except ValueError:
-        print "The legs of the robot cannot go that far!!"
+        print "The leg of the robot cannot go that far!!"
         
     return angles
 
+
 def get_legs(obj):
+    """
+	Return a list with all the legs of the robot passed in parameter, i.e a leg is three motors. The motorgroups is actually done manually.
+	"""
     return [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
 
+
 def get_xCorrection(leg):
+	"""
+		Return the correction (in mm) for the x axis of a specified leg
+		Parameters : 
+			- leg : The leg which is going to be moved
+	"""
 	i = int(leg[0].id*0.1)
 	return xCorrection[i-1]
 
+
 def get_yCorrection(leg):
+	"""
+	Return the correction (in mm) for the y axis of a specified leg
+	Parameters : 
+		- leg : The leg which is going to be moved
+	"""
 	i = int(leg[0].id*0.1)
 	return yCorrection[i-1]
 
@@ -62,6 +85,10 @@ def get_yCorrection(leg):
 """ I added the attributes needed to obtain this information to the json file
 Currently these attributes are set to zero"""
 def R_leg(theta,leg,R_center):
+	"""
+		
+
+	"""
 	xCorrection = get_xCorrection(leg)
 	yCorrection = get_yCorrection(leg)
 	cos = math.cos(math.radians(theta))
@@ -78,7 +105,15 @@ def R_leg(theta,leg,R_center):
 # outside the circle of rotation. We want a perfect rotation!
 # TEST : Working perfectly
 def move_leg(theta,z,leg,R_center = 100):
-	
+	"""
+		Do a rotation on one leg.
+		Parameters : 
+			- theta : the angle we want the leg to do
+			- z : the height of the tip of the leg.
+			- leg : the leg we want to move
+			- R_center : The radius of the circle which the center is equal to center of the entire robot. 
+		Return a tuple with the coordonnates of the leg.
+	"""
 	i=0
 	# Tupl is a vector that carries the angles that represent the final position of the tip of the leg
 	# The angles are calculated from the arguments of the function using inverse kinematics
@@ -98,6 +133,12 @@ def move_leg(theta,z,leg,R_center = 100):
 """SOLVED?"""
 #TEST : We SHOULD NOT put negative value in this function (otehrwise the legs (except legs 1-4) will 'meet each other')
 def initial_pos(theta,z):
+	"""
+		Put the robot in an initial position.
+		Parameters :
+			- theta : The initial angle of the leg from on its own axis.
+			- z : The height of the leg.
+	"""
 	# Experiments have shown that using the values 100 and 30 for changing x and y respectively is working okay
 	initial_position = []
 	initial_position.append(move_leg(0,z,legs[0]))
@@ -121,6 +162,13 @@ See the draft implementation for arbitrary_rotation above.
 # alpha is physically limited because of the legs. We should define this limit as max_angle - see above.
 # TEST : A value of 45 will make the legs (2-3 and 4-5) touch for a little while (actually until the next leg move)
 def rotation_angle(alpha,theta,z):
+	"""
+		Do a rotation on all the legs of the robot.
+		Parameters :
+			- alpha : 
+			- theta : The angle we want the legs to do.
+			- z : the height of the leg.
+	"""
 	#clockwise 2 and 5 are limited
 	breaklength = 0.1
 	# Position 1: The 'spider' position. This position has a low center of gravity. 
@@ -158,7 +206,15 @@ def rotation_angle(alpha,theta,z):
 # TEST : If the value of max_angle is not 20, the rotation does not work proprely
 # theta and z are simply values that determine the initial position
 # Other parameters are to define the rotation
-def arbitrary_rotation(beta, max_angle = 10, theta = 45, z = -60):
+def arbitrranany_rotation(beta, max_angle = 10, theta = 45, z = -60):
+	"""
+		Do a fully operational rotation on the robot (the return to inital position is in this function)
+		Parameters :
+			- beta : The angle we want the center of the robot to do.
+			- max_angle : The maximum angle the robot can do in one loop.
+			- theta : The rotation of each leg.
+			- z : the height of the robot.
+	"""
 # Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
 # This gives us the number of rotations we need to make by a predefined max_angle 
 # The remainder gives us the amount we need to rotate by to be able to finish the full rotation by an angle of beta
