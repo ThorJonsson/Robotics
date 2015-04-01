@@ -8,7 +8,7 @@ import pypot.robot
 
 asterix = None
 legs = []
-xCorrection = [10,-20,-20,10,-20,-20]
+xCorrection = [-10,-20,-20,10,-20,-20]
 yCorrection = [0,-15,15,0,15,-15]
 
 
@@ -158,11 +158,12 @@ def rotation_angle(alpha,theta,z):
 # TEST : If the value of max_angle is not 20, the rotation does not work proprely
 # theta and z are simply values that determine the initial position
 # Other parameters are to define the rotation
-def arbitrary_rotation(beta, max_angle = 40, theta = 45, z = -60):
+def arbitrary_rotation(beta, max_angle = 10, theta = 45, z = -60):
 # Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
 # This gives us the number of rotations we need to make by a predefined max_angle 
 # The remainder gives us the amount we need to rotate by to be able to finish the full rotation by an angle of beta
 # i.e. beta = q*max_angle + r
+	beta = 2*beta
 	initial_pos(theta,z)
 	if beta < 0:
 		max_angle = -max_angle

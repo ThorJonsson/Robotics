@@ -50,7 +50,7 @@ def initialize():
 	    m.compliant = False		# <=> enable_torque.
 	   # m.goal_position = 0
 
-	time.sleep(2)
+	time.sleep(0.1)
 	return asterix
 """
 	if asterix['motorgroups'] == None:
@@ -72,10 +72,10 @@ if __name__ == '__main__':
 	# asterix = get_object()
 	initialize()
 	walk.initial = rotation.initial_pos(30,-60)
-	rotation.arbitrary_rotation(180)
-	while 1:
-		walk.move_center_aside(10,-60)
+	#while 1:
+	#	walk.move_center_aside(10,-60)
 	# We really need to sleep before we die
+	rotation.arbitrary_rotation(360)	
 	time.sleep(0.1)
 	# time.sleep(2)
 	# walk.move_leg(30,0,rotation.legs[0])
