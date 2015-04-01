@@ -48,7 +48,7 @@ def initialize():
 	# (they will be sent during the next write loop iteration).
 	for m in asterix.motors:
 	    m.compliant = False		# <=> enable_torque.
-	    m.goal_position = 0
+	   # m.goal_position = 0
 
 	time.sleep(2)
 	return asterix
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 	# asterix = get_object()
 	initialize()
 	walk.initial = rotation.initial_pos(asterix,30,-60)
-	#rotation.arbitrary_rotation(asterix,360)
+	rotation.arbitrary_rotation(asterix,360)
 	# time.sleep(2)
 	# walk.move_leg(30,0,rotation.legs[0])
 	# time.sleep(1)
@@ -90,5 +90,5 @@ if __name__ == '__main__':
 	# 	time.sleep(0.2)
 
     # print rotation.legs[0][0].id
-	rotation.move_leg(0,-60,rotation.legs[0])
+	#rotation.move_leg(0,-60,rotation.legs[0])
 	

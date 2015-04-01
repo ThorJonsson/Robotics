@@ -68,7 +68,7 @@ def R_leg(theta,leg,R_center):
 	sin = math.sin(math.radians(theta))
 	tmp = (xCorrection**2)*((cos**2)-1)
 	tmp += (yCorrection**2)*((sin**2)-1)
-	tmp += xCorrection*yCorrection*math.sin(math.radians(2*theta))
+	tmp += xCorrection*yCorrection*math.sin(2*math.radians(theta))
 	tmp += R_center**2
 	return (-xCorrection*cos - yCorrection*sin + math.sqrt(tmp))
 
@@ -77,7 +77,7 @@ def R_leg(theta,leg,R_center):
 # This moves the leg given polar coordinates. Important because we when we need to do a rotation the legs should not move
 # outside the circle of rotation. We want a perfect rotation!
 # TEST : Working perfectly
-def move_leg(theta,z,leg,R_center = 100):
+def move_leg(theta,z,leg,R_center = 200):
 	
 	i=0
 	# Tupl is a vector that carries the angles that represent the final position of the tip of the leg
@@ -86,6 +86,7 @@ def move_leg(theta,z,leg,R_center = 100):
 	# Lets transform our polar coordinates onto the Cartesian plane
 	# print R_leg(theta,leg,R), " - ", leg[0].id
 	x = R_leg(theta,leg,R_center)*math.cos(math.radians(theta))
+	print x
 	y = R_leg(theta,leg,R_center)*math.sin(math.radians(theta))
 	motor_angles = leg_ik(x,y,z)
 	for m in leg:
@@ -179,5 +180,12 @@ def arbitrary_rotation(asterix,beta, max_angle = 20, theta = 45, z = -60):
 	rotation_angle(asterix,r, theta, z)
 	initial_pos(asterix,theta,z)
 
-
+def moving_center(asterix,x,y,z,l=63.7):
+	move_leg(100-x,y,z,legs[0])
+	move_leg(100+x,-y,z,legs[3])
+	move_leg(100-y,30-x,z,legs[5])
+	move_leg(100-y,-30-x,z,legs[4])
+	move_leg(100+y,30+x,z,legs[2])
+	move_leg(100+y,-30+x,z,legs[1])
+	time.sleep(2)
 """ ----------------------------------------------------------------------- """
