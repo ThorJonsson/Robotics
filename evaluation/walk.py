@@ -80,7 +80,12 @@ def move_leg(L,z,leg):
 		- L : The length between the start point and the end point of each leg (in a straight line).
 		- z : THe height of the center of the robot.
 """
-def move_center_forward(L,z,max_length=50):
+def move_center_forward(L,z=-60,max_length=50):
+	print "------- "
+	print type(L)
+	print "------- "
+	L = int(L)
+	# L = int(float(L))	#for the user interface
 	print "move_center_forward({0},{1},...)".format(L,z)
 
 	break_length = 2
@@ -118,10 +123,17 @@ def move_center_forward(L,z,max_length=50):
 	rotation.move_leg(theta,z,legs[order[3]])
 	time.sleep(break_length)
 
+<<<<<<< HEAD
 """
 THEORICAL WORK: The order of the leg or the direction could be wrong...TO TEST
 Make the robot move along its two legged side.
 """
+=======
+def move_center_aside(L,z,max_length=50):
+	print "move_center_aside"
+	print "move_center_aside({0},{1},...)".format(L,z)
+	break_length = 1
+>>>>>>> b475d17ba6167997b7013ed59293b468b48f8c76
 	theta = 20
 
 	if L>max_length:
@@ -158,7 +170,6 @@ Make the robot move along its two legged side.
 	rotation.move_leg(theta,z,legs[0])
 	rotation.move_leg(-theta,z,legs[3])
 	time.sleep(break_length)
-#move the center with leg 2, 4, 6 in the air	
 
 
 """

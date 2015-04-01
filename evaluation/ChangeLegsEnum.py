@@ -26,19 +26,7 @@ with pypot.dynamixel.DxlIO('/dev/ttyUSB0', baudrate=1000000) as dxl_io:
     
     pos = [0,0,30]
     
-    dxl_io.set_goal_position(dict(zip(leg1, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg2, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg3, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg4, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg5, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg6, pos)))
-    time.sleep(1)
-        #we change ids to ACW
+    #we change ids to ACW
     #change leg 2 to leg 8
     dxl_io.change_id({21 : 81, 22 : 82, 23 : 83})
     #change leg 3 to leg 7
@@ -70,18 +58,6 @@ with pypot.dynamixel.DxlIO('/dev/ttyUSB0', baudrate=1000000) as dxl_io:
     
     pos = [0,0,30]
     
-    dxl_io.set_goal_position(dict(zip(leg1, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg2, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg3, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg4, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg5, pos)))
-    time.sleep(1)
-    dxl_io.set_goal_position(dict(zip(leg6, pos)))
-    time.sleep(1)
     
     # we power off the motors
     #dxl_io.disable_torque(found_ids)
