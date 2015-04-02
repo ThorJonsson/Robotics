@@ -44,8 +44,7 @@ def detection():
 	with closing(pypot.robot.from_json('my_robot.json')) as my_robot:
 	    # do stuff without having to make sure not to forget to close my_robot!
 	    pass
- 
-  
+
 def initialize():
 	"""
 		Initialize the robot. Firstly get the robot object, and then put the angles of the motor at 0 deg.
@@ -143,7 +142,6 @@ if __name__ == '__main__':
 		walk.move_center_forward(20,-60)
 		walk.initial = rotation.initial_pos(30,-60)
 	# We really need to sleep before we die
-	# rotation.arbitrary_rotation(360)	
 	time.sleep(0.1)
 
 	

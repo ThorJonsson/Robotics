@@ -123,10 +123,17 @@ def move_center_forward(L,z=-60,max_length=50):
 	rotation.move_leg(theta,z,legs[order[3]])
 	time.sleep(break_length)
 
+<<<<<<< HEAD
+"""
+THEORICAL WORK: The order of the leg or the direction could be wrong...TO TEST
+Make the robot move along its two legged side.
+"""
+=======
 def move_center_aside(L,z,max_length=50):
 	print "move_center_aside"
 	print "move_center_aside({0},{1},...)".format(L,z)
 	break_length = 1
+>>>>>>> b475d17ba6167997b7013ed59293b468b48f8c76
 	theta = 20
 
 	if L>max_length:
