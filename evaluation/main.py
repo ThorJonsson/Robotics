@@ -103,13 +103,13 @@ def create_interface():
 	message.pack(side="left")
 
 	var_texte_2 = StringVar()
-	ligne_texte = Entry(aside, textvariable=var_texte_2, width=5)
+	ligne_texte_2 = Entry(aside, textvariable=var_texte_2, width=5)
 	ligne_texte.pack(side="left")
 
 	message = Label(aside, text="mm")
 	message.pack(side="left")
 
-	bouton_aside = Button(aside, text="Move Aside", fg="red",command=window.quit)
+	bouton_aside = Button(aside, text="Move Aside", fg="red",command=command=functools.partial(rotation.arbitrary_rotation,L=ligne_texte_2.get())
 	bouton_aside.pack(side="left") 
 
 	#rotation
@@ -119,13 +119,13 @@ def create_interface():
 	message.pack(side="left")
 
 	var_texte_3 = StringVar()
-	ligne_texte = Entry(rotation, textvariable=var_texte_3, width=5)
+	ligne_texte_3 = Entry(rotation, textvariable=var_texte_3, width=5)
 	ligne_texte.pack(side="left")
 
 	message = Label(rotation, text="degres")
 	message.pack(side="left")
 
-	bouton_aside = Button(rotation, text="Rotation", fg="red",command=window.quit)
+	bouton_aside = Button(aside, text="Move Aside", fg="red",command=command=functools.partial(rotation.arbitrary_rotation,beta=ligne_texte_3.get())
 	bouton_aside.pack(side="left") 
 
 	window.mainloop()

@@ -169,7 +169,7 @@ def rotation_angle(alpha,theta,z):
 	move_leg(-abs(theta)+alpha,z,legs[4])
 	time.sleep(breaklength)
 
-def arbitrranany_rotation(beta, max_angle = 10, theta = 45, z = -60):
+def arbitrary_rotation(beta, max_angle = 10, theta = 45, z = -60):
 	"""
 		Do a fully operational rotation on the robot (the return to inital position is in this function)
 		Parameters :
