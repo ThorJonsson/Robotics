@@ -8,8 +8,8 @@ import pypot.robot
 
 asterix = None
 legs = []
-xCorrection = [0,0,0,0,0,0]
-yCorrection = [0,0,0,0,0,0]
+xCorrection = [10,-20,-20,10,-20,-20]
+yCorrection = [0,-15,15,0,15,-15]
 
 
 
@@ -68,7 +68,7 @@ def R_leg(theta,leg,R_center):
 	sin = math.sin(math.radians(theta))
 	tmp = (xCorrection**2)*((cos**2)-1)
 	tmp += (yCorrection**2)*((sin**2)-1)
-	tmp += xCorrection*yCorrection*math.sin(math.radians(2*theta))
+	tmp += xCorrection*yCorrection*math.sin(2*math.radians(theta))
 	tmp += R_center**2
 	return (-xCorrection*cos - yCorrection*sin + math.sqrt(tmp))
 
@@ -107,7 +107,7 @@ def initial_pos(asterix,theta,z):
 	initial_position.append(move_leg(-abs(theta),z,legs[4]))
 	initial_position.append(move_leg(abs(theta),z,legs[5]))
 
-	time.sleep(0.1)
+	time.sleep(1)
 
 	return initial_position
 
@@ -122,7 +122,7 @@ See the draft implementation for arbitrary_rotation above.
 # TEST : A value of 45 will make the legs (2-3 and 4-5) touch for a little while (actually until the next leg move)
 def rotation_angle(asterix,alpha,theta,z):
 	#clockwise 2 and 5 are limited
-	breaklength = 0.1
+	breaklength = 1
 	# Position 1: The 'spider' position. This position has a low center of gravity. 
 	# Here we define the initial position. i.e. the spider position
 	# It is important to observe the x and y values of each leg in its own frame of reference
@@ -158,7 +158,7 @@ def rotation_angle(asterix,alpha,theta,z):
 # TEST : If the value of max_angle is not 20, the rotation does not work proprely
 # theta and z are simply values that determine the initial position
 # Other parameters are to define the rotation
-def arbitrary_rotation(asterix,beta, max_angle = 20, theta = 45, z = -60):
+def arbitrary_rotation(asterix,beta, max_angle = 40, theta = 45, z = -60):
 # Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
 # This gives us the number of rotations we need to make by a predefined max_angle 
 # The remainder gives us the amount we need to rotate by to be able to finish the full rotation by an angle of beta
@@ -179,5 +179,12 @@ def arbitrary_rotation(asterix,beta, max_angle = 20, theta = 45, z = -60):
 	rotation_angle(asterix,r, theta, z)
 	initial_pos(asterix,theta,z)
 
-
+def moving_center(asterix,x,y,z,l=63.7):
+	move_leg(100-x,y,z,legs[0])
+	move_leg(100+x,-y,z,legs[3])
+	move_leg(100-y,30-x,z,legs[5])
+	move_leg(100-y,-30-x,z,legs[4])
+	move_leg(100+y,30+x,z,legs[2])
+	move_leg(100+y,-30+x,z,legs[1])
+	time.sleep(2)
 """ ----------------------------------------------------------------------- """
