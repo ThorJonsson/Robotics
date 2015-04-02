@@ -116,7 +116,7 @@ def move_center_aside(L,z):
 	theta = 20
 	if L<0:
 		theta = -theta
-	print "initial position"
+
 	initial = rotation.initial_pos(30,-60)
 	time.sleep(break_length)
 	print "putting legs 2-3-5-6 in the air"
