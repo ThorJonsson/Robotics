@@ -186,7 +186,24 @@ Assume that the tip of a leg is on the circle of rotation. Then, \\
 \begin{center}
 $\coord{R_c\cos(\theta_c)}{R_c\sin(\theta_c)} = \coord{R_l\cos(\theta_l)+x_{corr}}{R_l\sin(\theta_l)+y_{corr}}$.
 \end{center}
-Therefore, 
+So we have two equations:
+\begin{equation}
+R_c\cos(\theta_c) = R_l\cos(\theta_l)+x_{corr}
+\end{equation}
+\begin{equation}
+R_c\sin(\theta_c) = R_l\sin(\theta_l)+y_{corr}
+\end{equation}
+By putting the both equations to the power of two and adding them with each other we obtain the following second degree polynomial equation:
+\begin{equation*}
+R_l^2 + 2R_l\left(\cos(\theta_l)+x_{corr}+\sin(\theta_l)+y_{corr}\right) - R_c^2 + x_{corr}^2 + y_{corr}^2 = 0
+\end{equation*}
+The positive root of this equation is:
+\begin{equation*}
+R_l = -x_{corr}\cos(\theta_l)-y_{corr}\sin(\theta_l)+\sqrt{x_{corr}^2\left(\cos^2(\theta_l)-1\right) + y_{corr}^2\left(\sin^2(\theta_l)-1\right)+x_{corr}y_{corr}\sin(2\theta_l)}
+\end{equation*} 
+So this should give us the radius of each leg as a function of the correction and the angle given.
+\clearpage
+
 \subsection{Program}
 \lstinputlisting[language=python]{rotation.py}
 \clearpage
