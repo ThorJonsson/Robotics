@@ -72,18 +72,6 @@ def get_yCorrection(leg):
 	i = int(leg[0].id*0.1)
 	return yCorrection[i-1]
 
-"""--------------------- Rotation Functions ---------------------------"""
-""" Written by Thor the 24/03/15 """
-""" Tested by Corentin the 24/03/15 """
-
-
-""" -------------------Mathematics to correct the rotation ------------"""
-""" Written by Thor the 26/04/15"""
-# This needs to be done so that we can define a common circle of rotation
-# for all the legs. To communicate this common information to all the legs
-# we need to express the radius of this common circle of rotation as a function of theta and the legs 
-""" I added the attributes needed to obtain this information to the json file
-Currently these attributes are set to zero"""
 def R_leg(theta,leg,R_center):
 	"""
 		
@@ -99,11 +87,6 @@ def R_leg(theta,leg,R_center):
 	tmp += R_center**2
 	return (-xCorrection*cos - yCorrection*sin + math.sqrt(tmp))
 
-
-# This function takes care of 1 leg at a time
-# This moves the leg given polar coordinates. Important because we when we need to do a rotation the legs should not move
-# outside the circle of rotation. We want a perfect rotation!
-# TEST : Working perfectly
 def move_leg(theta,z,leg,R_center = 100):
 	"""
 		Do a rotation on one leg.
@@ -128,10 +111,6 @@ def move_leg(theta,z,leg,R_center = 100):
 		i+=1
 	return (x,y,z)
 
-# This should just give us our initial spider position
-# We also use this function when rotating to refix the legs' frames of reference
-"""SOLVED?"""
-#TEST : We SHOULD NOT put negative value in this function (otehrwise the legs (except legs 1-4) will 'meet each other')
 def initial_pos(theta,z):
 	"""
 		Put the robot in an initial position.
@@ -152,15 +131,6 @@ def initial_pos(theta,z):
 
 	return initial_position
 
-"""
-TODO: make sure that this works. If it works than we can easily do experiments to find the highest value on alpha
-If we know the highest value of alpha we can determine the number of turns needed to do an arbitrary amount of rotation by using Euclidean division
-See the draft implementation for arbitrary_rotation above.
-"""
-# theta is the value we need to set the initial position
-# alpha determines the amount of rotation (made by each call to the function) from this initial position
-# alpha is physically limited because of the legs. We should define this limit as max_angle - see above.
-# TEST : A value of 45 will make the legs (2-3 and 4-5) touch for a little while (actually until the next leg move)
 def rotation_angle(alpha,theta,z):
 	"""
 		Do a rotation on all the legs of the robot.
@@ -199,13 +169,6 @@ def rotation_angle(alpha,theta,z):
 	move_leg(-abs(theta)+alpha,z,legs[4])
 	time.sleep(breaklength)
 
-# max_angle = 20 is just a guess. 
-# TEST : Working not too bad. beta = 180 are doing a rotation of 90deg. It seems that we have to multiply the wanted value by 2 to have a proper rotation
-"""SOLVED?""" 
-#TEST : If we put negative value fot the beta angle, this is just not working.
-# TEST : If the value of max_angle is not 20, the rotation does not work proprely
-# theta and z are simply values that determine the initial position
-# Other parameters are to define the rotation
 def arbitrranany_rotation(beta, max_angle = 10, theta = 45, z = -60):
 	"""
 		Do a fully operational rotation on the robot (the return to inital position is in this function)
@@ -215,10 +178,7 @@ def arbitrranany_rotation(beta, max_angle = 10, theta = 45, z = -60):
 			- theta : The rotation of each leg.
 			- z : the height of the robot.
 	"""
-# Here we do euclidean division. We determine how often max_angle divides beta and the remainder of this division.
-# This gives us the number of rotations we need to make by a predefined max_angle 
-# The remainder gives us the amount we need to rotate by to be able to finish the full rotation by an angle of beta
-# i.e. beta = q*max_angle + r
+
 	beta = 2*beta
 	initial_pos(theta,z)
 	if beta < 0:
@@ -236,4 +196,3 @@ def arbitrranany_rotation(beta, max_angle = 10, theta = 45, z = -60):
 	rotation_angle(r, theta, z)
 	initial_pos(theta,z)
 
-""" ----------------------------------------------------------------------- """
