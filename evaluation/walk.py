@@ -10,10 +10,19 @@ import rotation
 import Tkinter as tk # to get the a graphic interface for the control function
 
 
-asterix = None
 legs = []
 initial = []
 
+
+"""
+	Indirect kinematic function.
+	Parameters : 
+		- (x3,y3,z3) : The coordonnates where we want to put the leg
+		- alpha : the correction for the second motor.
+		- beta : the correction for the third motor.
+		- l2, l3 : the length of the different part of the leg
+	Return a tuple with three values, corresponding to the angles of each motor of the leg.
+"""
 def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
     d13 = math.sqrt(x3*x3 + y3*y3) - l1
     d = math.sqrt(d13*d13 + z3*z3)
@@ -40,7 +49,7 @@ def leg_ik(x3,y3,z3,alpha = 20.69, beta = 5.06,l1=51,l2=63.7,l3=93):
     return angles
 
 """
-Get the legs of the given robot object (from the json file).
+	Return a list with all the legs of the robot passed in parameter, i.e a leg is three motors. The motorgroups is actually done manually.
 """
 def get_legs(obj):
 	return [obj.leg1,obj.leg2,obj.leg3,obj.leg4,obj.leg5,obj.leg6]
@@ -48,9 +57,9 @@ def get_legs(obj):
 """
 	Makes one leg move.
 	parameters:
-		L -- The length between the start point and the end point (in a right line)
-		leg -- The leg we want to move
-		initial -- a tuple with three values wich correspond to the intial coordonnate of the end of the leg
+		- L : The length between the start point and the end point (in a right line)
+		- z : THe height of the center of the robot.
+		- leg : The leg we want to move
 """
 def move_leg(L,z,leg):
 	num = int(leg[0].id*0.1)-1
@@ -65,6 +74,7 @@ def move_leg(L,z,leg):
 	for motors in leg:
 		motors.goal_position = angles[i]
 		i+=1
+
 """"
 Make the robot move along his two separate legs
 """
