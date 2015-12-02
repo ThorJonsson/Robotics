@@ -1,0 +1,220 @@
+%!TEX encoding = UTF-8 Unicode
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage[top=2cm, left=1.2cm, right=1.2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{fixltx2e}
+\usepackage{enumerate}
+
+\usepackage{listings}
+\usepackage{color}
+\lstset{ %
+  language=Matlab,                     % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{mygray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{mygreen},   % comment style
+  stringstyle=\color{mymauve},      % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+} 
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+%%%%%%% SETUP %%%%%%%%
+
+% Header and footer
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancy}
+\lhead{Robotique }
+\rhead{Documentation}
+\chead{Asterix}
+%%% Custom Commands %%%
+\newcommand{\coord}[2]{\left(#1,#2\right)}
+%%%% END OF SETUP %%%%
+
+\begin{document}
+%%%% Frontpage %%%%%%
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % 
+\center % Höfum allt á blaðsíðunni fyrir miðju
+
+%----------------------------------------------------------------------------------------
+% Forsiðumynd
+%----------------------------------------------------------------------------------------
+
+\begin{center}
+\begin{minipage}{0.4\textwidth}
+\end{minipage}\\[1cm]
+%\vspace{2cm}
+  % Upper part of the page
+  \includegraphics[width=10cm]{logo.jpg}\\[1cm]
+\end{center}
+%----------------------------------------------------------------------------------------
+% Heiti skóla
+%----------------------------------------------------------------------------------------
+ % Nafn skola
+%\textsc{\Large Informatique}\\[0.25cm]
+%Þetta:[xcm] segir til um bil fyrir neðan línu
+
+%----------------------------------------------------------------------------------------
+% Titill
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm] %Lárétt lina
+{ \huge \bfseries Introduction à la robotique par la pratique}\\[0.5cm] % Titill ritgerðar
+\textsc{\Large Documentation de Projet}\\[0.5cm] 
+\HRule \\[1.5cm]  %Lárétt lína
+ 
+%------------------------------
+% Höfundur
+%------------------------------
+
+\begin{minipage}{0.4\textwidth} %Setjum minipage með breidd 0.4 af breidd texta
+\begin{flushleft} \large %Höfum þetta til vinstri
+\emph{Étudiants:}
+\\
+Corentin Charles
+\\
+Clément Renazeau
+\\
+Þorsteinn Hjörtur Jónsson % Nafn Höfundar
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large %Höfum þetta til hægri
+\vspace{-1cm}
+\emph{Enseigneurs:} 
+\\
+Rémi Fabre
+\\
+Steve Nguyen
+ % Nafn Kennara
+\end{flushright}
+\end{minipage}\\[3cm]
+%-----------------------------
+%   Dagsetning
+%-----------------------------
+\nopagebreak      %Við skulum ekki fara á nýja blaðsíðu
+{\large \today}\\[3cm] % Gott er að vita dagsetninguna
+\null
+\end{titlepage}
+\clearpage
+\section{Rotation}
+\subsection{Description}
+To make Asterix do a rotation we need to define a circle of rotation, with regards to the center of the robot, on which the legs will move on.
+As we should always use inverse kinematics to decide the motor angles we will need to express the the circle of rotation in each legs' coordinate frame. To do this we'll need to translate the coordinates of the center system by the vector $(x_{corr}, y_{corr})$, i.e. a point $\left(x_c,y_c\right)$ in the center system has the coordinates $\left(x_l + x_{corr},y_l+y_{corr}\right)$ with respect to the coordinate system of the leg.\\ 
+The following table shows measurements of this vector. \\
+\vspace{0.5cm}
+\\
+Let $R_c$ be the radius of the circle of rotation. We can define the circle of rotation by $\left(R_c \cos(\theta_c), R_c \sin(\theta_c)\right)$ for $\theta_c \in \left[0,2\pi\right]$.\\
+Let $R_l$ be the distance from the tip of a leg to the origin of the coordinate system which it defines and let $\theta_l \in \left[0,2\pi\right]$ such that $\left(R_l \cos(\theta_l), R_l \sin(\theta_l)\right)$ describes the tip of the leg.\\
+Assume that the tip of a leg is on the circle of rotation. Then, \\
+\begin{center}
+$\coord{R_c\cos(\theta_c)}{R_c\sin(\theta_c)} = \coord{R_l\cos(\theta_l)+x_{corr}}{R_l\sin(\theta_l)+y_{corr}}$.
+\end{center}
+So we have two equations:
+\begin{equation}
+R_c\cos(\theta_c) = R_l\cos(\theta_l)+x_{corr}
+\end{equation}
+\begin{equation}
+R_c\sin(\theta_c) = R_l\sin(\theta_l)+y_{corr}
+\end{equation}
+By putting the both equations to the power of two and adding them with each other we obtain the following second degree polynomial equation:
+\begin{equation*}
+R_l^2 + 2R_l\left(\cos(\theta_l)+x_{corr}+\sin(\theta_l)+y_{corr}\right) - R_c^2 + x_{corr}^2 + y_{corr}^2 = 0
+\end{equation*}
+The positive root of this equation is:
+\begin{equation*}
+R_l = -x_{corr}\cos(\theta_l)-y_{corr}\sin(\theta_l)+\sqrt{x_{corr}^2\left(\cos^2(\theta_l)-1\right) + y_{corr}^2\left(\sin^2(\theta_l)-1\right)+x_{corr}y_{corr}\sin(2\theta_l)}
+\end{equation*} 
+So this should give us the radius of each leg as a function of the correction and the angle given.
+\clearpage
+
+\subsection{Program}
+\lstinputlisting[language=python]{rotation.py}
+\clearpage
+\section{Walk}
+\subsection{Program}
+\lstinputlisting[language=python]{walk.py}
+\clearpage
+\section{Main}
+\subsection{Program}
+\lstinputlisting[language=python]{main.py}
+\clearpage
+
+\vspace{1.5cm}
+
+
+
+\end{document}
